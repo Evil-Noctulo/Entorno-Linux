@@ -30,8 +30,9 @@ Después de la instalación, asegúrate de seleccionar BSPWM
 #### Para Root:
 
 ```bash
-sudo su
-cd
+sudo su # usar este comandos de forma individual
+cd # usar este comandos de forma individual
+
 git clone https://github.com/NvChad/starter ~/.config/nvim
 mkdir /opt/nvim
 cd /opt/nvim
@@ -43,37 +44,11 @@ cd /opt/nvim/nvim-linux64/bin
 #### Para Usuario No Privilegiado:
 
 ```bash
-cd
+cd # usar este comandos de forma individual
+
 git clone https://github.com/NvChad/starter ~/.config/nvim
 nvim
 ```
-
-## Configurar zsh
-
-`nano ~/.p10k.zsh`
-
-y agregar estas 3 líneas
-![zsh](images/zsh.png)
-![zsh](images/zsh2.png)
-####
-# Rutas
-
-Polybar
-
-`~/.config/polybar`
-
-bspwn
-
-`~/.config/bspwm`
-
-sxhkd (short cut)
-
-`~/.config/sxhkd`
-
-Picom
-
-`~/.config/picom`
-
 
 ## problema con nvim
 
@@ -188,6 +163,32 @@ Picom
 Configurar p10k
 
 `p10k configure`
+
+## Configurar zsh
+
+`nano ~/.p10k.zsh`
+
+y agregar estas 3 líneas
+![zsh](images/zsh.png)
+![zsh](images/zsh2.png)
+####
+# Rutas
+
+Polybar
+
+`~/.config/polybar`
+
+bspwn
+
+`~/.config/bspwm`
+
+sxhkd (short cut)
+
+`~/.config/sxhkd`
+
+Picom
+
+`~/.config/picom`
 
 Atajos (Personalización de entorno en Linux)
 
