@@ -138,7 +138,7 @@ y agregar estas 3 líneas
 Comentamos todo el bloque
 
 ![zsh](images/zsh2.png)
-#### 📁 Rutas de Configuración
+## 📁 Rutas de Configuración
 A continuación se detallan las rutas donde se almacenan los archivos de configuración de los componentes principales del entorno:
 
 Polybar(Barra):
@@ -220,7 +220,7 @@ Atajos (Personalización de entorno en Linux)
 ---
 
 📬 Contacto
-Si tienes preguntas o necesitas ayuda, no dudes en escribirme a través de mi perfil de LinkedIn.
+Si tienes preguntas o necesitas ayuda, no dudes en escribirme a través de mi perfil de [LinkedIn](https://www.linkedin.com/in/cristian-hsilva).
 
 ¡Gracias por tu interés y apoyo!
 
