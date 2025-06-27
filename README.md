@@ -20,6 +20,7 @@ cd Entorno-Linux
 chmod +x install.sh
 sudo ./install.sh
 ```
+![instalacion](images/instalacion.png)
 
 Después de la instalación, asegúrate de seleccionar BSPWM
  ![bspwm](images/02.png)
