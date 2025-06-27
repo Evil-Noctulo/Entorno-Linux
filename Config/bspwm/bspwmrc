@@ -33,7 +33,3 @@ flameshot &
 
 # Configuración final de bspwm
 #bspc config border_width 0
-
-#arregla problema de kitty con nvchad
-~/.local/kitty.app/bin/kitty &
-
