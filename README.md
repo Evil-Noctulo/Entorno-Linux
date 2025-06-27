@@ -15,14 +15,13 @@ Recuerda que este script esta diseñado para un sistema operavito Kali Linux en 
 Clona el repositorio y prepara la instalación con los siguientes comandos:
 
 ```bash
-git clone https://github.com/Balthael/KaliEntorno
-cd KaliEntorno
+git clone https://github.com/Evil-Noctulo/Entorno-Linux
+cd Entorno-Linux
 chmod +x install.sh
 sudo ./install.sh
 ```
 
-Después de la instalación, asegúrate de seleccionar BSPWM e instalar `fzf` y `nvim`, ya que no están incluidos en el script inicial.
-
+Después de la instalación, asegúrate de seleccionar BSPWM
  ![bspwm](images/02.png)
 
 ### Problemas comunes
