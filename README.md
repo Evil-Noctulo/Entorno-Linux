@@ -85,7 +85,7 @@ source ~/.zshrc
 ```bash
 sudo tee /usr/local/bin/kitty > /dev/null << 'EOF'
 #!/usr/bin/env bash
-exec /home/USUARIO/.local/kitty.app/bin/kitty "$@"
+exec "$HOME/.local/kitty.app/bin/kitty" "$@"
 EOF
 sudo chmod +x /usr/local/bin/kitty
 ```
@@ -94,7 +94,7 @@ Modificar sxhkdrc
 
 `sudo nvim ~/.config/sxhkd/sxhkdrc`
 
-`/home/USUARIO/.local/kitty.app/bin/kitty`
+`$HOME/.local/kitty.app/bin/kitty`
 
 reiniciamos sxhkd
 
@@ -112,7 +112,7 @@ Cargar zsh en root
 
 modificar target
 
-`sudo chown usuario:usuario /home/usuario/.config/bin/target`
+`sudo chown "$USER:$USER" "$HOME/.config/bin/target"`
 
 ### Otros problemas
 
