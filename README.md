@@ -94,7 +94,7 @@ Modificar sxhkdrc
 
 `sudo nvim ~/.config/sxhkd/sxhkdrc`
 
-`$HOME/.local/kitty.app/bin/kitty`
+`/usr/local/bin/kitty`
 
 reiniciamos sxhkd
 
