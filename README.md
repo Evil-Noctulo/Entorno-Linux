@@ -60,7 +60,7 @@ cd # usar estos comandos de forma individual
 git clone https://github.com/NvChad/starter ~/.config/nvim
 mkdir /opt/nvim
 cd /opt/nvim
-mv /home/USUARIO/Entorno-Linux/neovim/nvim-linux64 .
+mv "$HOME/Entorno-Linux/neovim/nvim-linux64" .
 cd /opt/nvim/nvim-linux64/bin
 ./nvim
 ```
@@ -114,7 +114,7 @@ modificar target
 
 `sudo chown usuario:usuario /home/usuario/.config/bin/target`
 
-### Problemas comunes
+### Otros problemas
 
 Si encuentras un error al cambiar al usuario root, sigue estos pasos para corregirlo:
 
@@ -138,8 +138,7 @@ y agregar estas 3 líneas
 Comentamos todo el bloque
 
 ![zsh](images/zsh2.png)
-####
-##📁 Rutas de Configuración
+#### 📁 Rutas de Configuración
 A continuación se detallan las rutas donde se almacenan los archivos de configuración de los componentes principales del entorno:
 
 Polybar(Barra):
