@@ -670,17 +670,30 @@ fi
 mark_task_completed "$log_action"
 
 log_action="Copiar y dar permisos a scripts personalizados"
+# La línea de cp debería haber cambiado ya a 'sudo cp'
 sudo cp "$user_home/Entorno-Linux/bin/"* "$user_home/.config/bin/" > /dev/null 2>&1
 if [ $? -ne 0 ]; then
     handle_error "$log_action" "Error al copiar scripts personalizados. Asegúrate de que '$user_home/Entorno-Linux/bin/' exista y tenga contenido."
 fi
-sudo -u "$SUDO_USER" chmod +x \
+
+# AHORA EL CAMBIO CRÍTICO: Elimina '-u "$SUDO_USER"' de chmod
+sudo chmod +x \
     "$user_home/.config/bin/ethernet_status.sh" \
     "$user_home/.config/bin/hackthebox_status.sh" \
     "$user_home/.config/bin/target_to_hack.sh" > /dev/null 2>&1
 if [ $? -ne 0 ]; then
     handle_error "$log_action" "Error al dar permisos de ejecución a scripts personalizados."
 fi
+
+# Y asegúrate de que esta sección para cambiar la propiedad esté presente y correcta
+sudo chown "$SUDO_USER":"$SUDO_USER" \
+    "$user_home/.config/bin/ethernet_status.sh" \
+    "$user_home/.config/bin/hackthebox_status.sh" \
+    "$user_home/.config/bin/target_to_hack.sh" > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+    echo "Advertencia: No se pudo cambiar la propiedad de los scripts en $user_home/.config/bin." >&2
+fi
+
 mark_task_completed "$log_action"
 
 # Instalar y configurar sudo-plugin
