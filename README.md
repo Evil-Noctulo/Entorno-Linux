@@ -4,6 +4,7 @@
 ![image](images/entorno.png)
 
 Bienvenidos a la guía de personalización del entorno de S4vitar en Linux. Aquí encontrarás todos los pasos necesarios para una instalación completa y funcional.
+Este script usa de base el script creado por el usuario [Balthael](https://github.com/Balthael)
 
 
 ##📜 Descripción
