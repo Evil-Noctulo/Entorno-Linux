@@ -47,7 +47,7 @@ cd # usar este comandos de forma individual
 git clone https://github.com/NvChad/starter ~/.config/nvim
 mkdir /opt/nvim
 cd /opt/nvim
-mv /home/su_usuario/KaliEntorno/neovim/nvim-linux64 .
+mv /home/USUARIO/Entorno-Linux/neovim/nvim-linux64 .
 cd /opt/nvim/nvim-linux64/bin
 ./nvim
 ```
