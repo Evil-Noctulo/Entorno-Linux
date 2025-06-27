@@ -42,25 +42,6 @@ exit
 
 ![Solución error](images/04.png)
 
-### Instalación de fzf
-
-Instalación para usuarios root y no privilegiados:
-
-**Root:**
-
-```bash
-sudo su
-git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-~/.fzf/install
-```
-
-**Usuario no privilegiado:**
-
-```bash
-git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-~/.fzf/install
-```
-
 ### Instalación de Neovim
 
 #### Para Root:
@@ -103,40 +84,8 @@ Picom
 
 `~/.config/picom`
 
-# Problemas con nvim
 
-Puede que al usar nvim se dupliquen caracterres como al apretar tab o backspace para debemos hacer lo siguiente
-
-✅ Borra el actual:
-
-`sudo rm -rf /opt/nvim/`
-
-📦 Descarga la última versión estable oficial de Neovim:
-
-https://github.com/neovim/neovim/releases/tag/v0.11.1
-
-![image.png](attachment:a7568177-ba01-4bb4-b60a-8fed564ab644:image.png)
-
-descomprimimos
-
-`tar -xf nvim-linux64.tar.gz`
-
-🚀 Instala y enlaza:
-
-`sudo mv nvim-linux64 /opt/nvim`
-`sudo ln -sf /opt/nvim/bin/nvim /usr/local/bin/nvim`
-
-# Instalar nvchad
-
-ingresar a la pagina hacer los pasos anterior
-
-https://nvchad.com/docs/quickstart/install/
-
-`git clone https://github.com/NvChad/starter ~/.config/nvim && nvim` 
-
-y listo
-
-## Otro problema con nvim
+## problema con nvim
 
 puede que al usar nvim tengamos este error
 
@@ -149,7 +98,7 @@ stack traceback:
 
 **Correción de Nvim**
 
-actualizar kitty, nuevamente pero ahora de forma manual
+actualizar kitty nuevamente pero ahora de forma manual.
 
 `curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh`
 
@@ -173,14 +122,12 @@ git clone https://github.com/NvChad/starter ~/.config/nvim
 nvim
 ```
 
-ahora debemos crear un alias. LO hacemos como root y usuario no privilegiado
+ahora debemos crear un alias. Lo hacemos como root y usuario no privilegiado
 
 ```bash
 echo 'alias nvim="/opt/nvim/nvim-linux64/bin/nvim"' >> ~/.zshrc
 source ~/.zshrc
 ```
-
-Si el error persiste hacer lo siguiente:
 
 `sudo rm /usr/bin/kitty`
 
@@ -218,6 +165,23 @@ configurar p10k
 
 `p10k configure`
 
+# Rutas
+
+Polybar (Barra de arriba)
+
+`~/.config/polybar`
+
+bspwn
+
+`~/.config/bspwm`
+
+sxhkd (short cut)
+
+`~/.config/sxhkd`
+
+Picom
+
+`~/.config/picom`
 
 Atajos (Personalización de entorno en Linux)
 
