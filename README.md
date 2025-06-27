@@ -25,23 +25,6 @@ sudo ./install.sh
 Después de la instalación, asegúrate de seleccionar BSPWM
  ![bspwm](images/bspwm.png)
 
-### Problemas comunes
-
-Si encuentras un error al cambiar al usuario root, sigue estos pasos para corregirlo:
-
-![Error root](images/03.png)
-
-Solución:
-
-```bash
-Ctrl + C
-compaudit
-chown root:root /usr/local/share/zsh/site-functions/_bspc
-exit
-```
-
-![Solución error](images/04.png)
-
 ### Instalación de Neovim
 
 #### Para Root:
@@ -168,9 +151,21 @@ modificar target
 
 `sudo chown usuario:usuario /home/usuario/.config/bin/target`
 
-configurar p10k
+### Problemas comunes
 
-`p10k configure`
+Si encuentras un error al cambiar al usuario root, sigue estos pasos para corregirlo:
+
+![Error root](images/03.png)
+
+Solución:
+
+```bash
+Ctrl + C
+compaudit
+chown root:root /usr/local/share/zsh/site-functions/_bspc
+exit
+```
+
 
 # Rutas
 
@@ -189,6 +184,10 @@ sxhkd (short cut)
 Picom
 
 `~/.config/picom`
+
+Configurar p10k
+
+`p10k configure`
 
 Atajos (Personalización de entorno en Linux)
 
