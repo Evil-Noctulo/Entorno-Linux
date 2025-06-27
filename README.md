@@ -110,9 +110,11 @@ Modificar sxhkdrc
 
 `/home/USUARIO/.local/kitty.app/bin/kitty`
 
+reiniciamos sxhkd
+
 `pkill -USR1 -x sxhkd`
 
-en caso de tener error al usar `sudo nvim` hacer lo siguiente
+Eliminamos nvim obsoleto
 
 `sudo rm -f /usr/local/bin/nvim` 
 
