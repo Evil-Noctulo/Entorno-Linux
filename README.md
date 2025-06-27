@@ -3,10 +3,13 @@
 
 ![image](images/entorno.png)
 
-Bienvenidos a la guía de personalización del entorno de S4vitar en Linux. Aquí encontrarás todos los pasos necesarios para una instalación completa y funcional.
-Este script usa de base el script creado por el usuario [Balthael](https://github.com/Balthael)
+👋 Bienvenido
+Esta es una guía de personalización del entorno de S4vitar en Linux, adaptada y mejorada para facilitar una instalación completa y funcional.
 
+🛠️ Este script se basa en el trabajo original del usuario [Balthael](https://github.com/Balthael), adaptado y extendido para automatizar aún más la experiencia.
 
+Aquí encontrarás todos los pasos necesarios para dejar tu entorno al estilo S4vitar, con herramientas visuales, atajos eficientes y una configuración lista para usar.
+ 
 ##📜 Descripción
 Este script está diseñado para sistemas operativos Linux en inglés. Si tu sistema está en español, simplemente reemplaza "Downloads" por "Descargas" dentro del archivo install.sh.
 
