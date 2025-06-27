@@ -2,13 +2,18 @@
 # Entorno de S4vitar en Linux 100% Funcional
 
 ![image](images/entorno.png)
-
 👋 Bienvenido
-Esta es una guía de personalización del entorno de S4vitar en Linux, adaptada y mejorada para facilitar una instalación completa y funcional.
+Esta es una guía de personalización del entorno de S4vitar en Linux, adaptada y mejorada para lograr una instalación completa, funcional y visualmente atractiva.
 
-🛠️ Este script se basa en el trabajo original del usuario [Balthael](https://github.com/Balthael), adaptado y extendido para automatizar aún más la experiencia.
+🛠️ Este script se basa en el trabajo original del usuario [Balthael](https://github.com/Balthael), pero ha sido modificado para:
 
-Aquí encontrarás todos los pasos necesarios para dejar tu entorno al estilo S4vitar, con herramientas visuales, atajos eficientes y una configuración lista para usar.
+Automatizar completamente la instalación del entorno.
+
+Corregir errores y problemas que presenta el script original en sistemas como Parrot OS.
+
+Optimizar el proceso para dejar todo listo con una sola ejecución.
+
+Aquí encontrarás todos los pasos necesarios para dejar tu sistema al estilo S4vitar, incluyendo atajos, herramientas visuales y configuraciones listas para usar.
  
 ## 📜 Descripción
 Este script está diseñado para sistemas operativos Linux en inglés. Si tu sistema está en español, simplemente reemplaza "Downloads" por "Descargas" dentro del archivo install.sh.
