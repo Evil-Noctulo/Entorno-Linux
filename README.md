@@ -84,6 +84,141 @@ git clone https://github.com/NvChad/starter ~/.config/nvim
 nvim
 ```
 
+####
+# Rutas
+
+Polybar
+
+`~/.config/polybar`
+
+bspwn
+
+`~/.config/bspwm`
+
+sxhkd (short cut)
+
+`~/.config/sxhkd`
+
+Picom
+
+`~/.config/picom`
+
+# Problemas con nvim
+
+Puede que al usar nvim se dupliquen caracterres como al apretar tab o backspace para debemos hacer lo siguiente
+
+✅ Borra el actual:
+
+`sudo rm -rf /opt/nvim/`
+
+📦 Descarga la última versión estable oficial de Neovim:
+
+https://github.com/neovim/neovim/releases/tag/v0.11.1
+
+![image.png](attachment:a7568177-ba01-4bb4-b60a-8fed564ab644:image.png)
+
+descomprimimos
+
+`tar -xf nvim-linux64.tar.gz`
+
+🚀 Instala y enlaza:
+
+`sudo mv nvim-linux64 /opt/nvim`
+`sudo ln -sf /opt/nvim/bin/nvim /usr/local/bin/nvim`
+
+# Instalar nvchad
+
+ingresar a la pagina hacer los pasos anterior
+
+https://nvchad.com/docs/quickstart/install/
+
+`git clone https://github.com/NvChad/starter ~/.config/nvim && nvim` 
+
+y listo
+
+## Otro problema con nvim
+
+puede que al usar nvim tengamos este error
+
+```jsx
+Error detected while processing /home/noctulo/.config/nvim/init.lua:
+E5113: Error while calling lua chunk: /home/noctulo/.config/nvim/init.lua:7: attempt to index field 'uv' (a nil value)
+stack traceback:
+/home/noctulo/.config/nvim/init.lua:7: in main chunk
+```
+
+**Correción de Nvim**
+
+actualizar kitty, nuevamente pero ahora de forma manual
+
+`curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh`
+
+```bash
+sudo su # usar estos comandos de forma individual
+cd # usar estos comandos de forma individual
+
+git clone https://github.com/NvChad/starter ~/.config/nvim
+mkdir /opt/nvim
+cd /opt/nvim
+mv /home/sinh/Entorno-Linux/neovim/nvim-linux64 .
+cd /opt/nvim/nvim-linux64/bin
+./nvim
+```
+
+Ahora con el usuario normal
+
+```bash
+cd # usar estos comandos de forma individual
+git clone https://github.com/NvChad/starter ~/.config/nvim
+nvim
+```
+
+ahora debemos crear un alias. LO hacemos como root y usuario no privilegiado
+
+```bash
+echo 'alias nvim="/opt/nvim/nvim-linux64/bin/nvim"' >> ~/.zshrc
+source ~/.zshrc
+```
+
+Si el error persiste hacer lo siguiente:
+
+`sudo rm /usr/bin/kitty`
+
+```bash
+sudo tee /usr/local/bin/kitty > /dev/null << 'EOF'
+#!/usr/bin/env bash
+exec /home/sinh/.local/kitty.app/bin/kitty "$@"
+EOF
+sudo chmod +x /usr/local/bin/kitty
+```
+
+Modificar sxhkdrc
+
+`sudo nvim ~/.config/sxhkd/sxhkdrc`
+
+`/home/sinh/.local/kitty.app/bin/kitty`
+
+`pkill -USR1 -x sxhkd`
+
+en caso de tener error al usar `sudo nvim` hacer lo siguiente
+
+`sudo rm -f /usr/local/bin/nvim` 
+
+`sudo ln -s /opt/nvim/nvim-linux64/bin/nvim /usr/local/bin/nvim`
+
+Cargar zsh en root
+
+`sudo chsh -s /usr/bin/zsh root`
+
+modificar target
+
+`sudo chown usuario:usuario /home/usuario/.config/bin/target`
+
+configurar p10k
+
+`p10k configure`
+
+
 Atajos (Personalización de entorno en Linux)
 
 | Combinación           | Acción                                   |
