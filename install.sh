@@ -92,12 +92,6 @@ display_checklist() {
     echo "" # Deja una línea en blanco al final de la checklist
 }
 
-# Función para marcar una tarea como completada y actualizar la pantalla
-mark_task_completed() {
-    COMPLETED_TASKS+=("$1")
-    display_checklist
-}
-
 # Función para manejar errores y salir (si es necesario)
 handle_error() {
     local task_name="$1"
@@ -301,7 +295,11 @@ if [ $? -ne 0 ]; then
     handle_error "Descargar y instalar Polybar" "Error al clonar Polybar."
 fi
 cd polybar && mkdir build && cd build || handle_error "Descargar y instalar Polybar" "No se pudo preparar el directorio de Polybar."
-sudo -u "$SUDO_USER" cmake .. > /dev/null 2>&1
+
+# <<< MODIFICACIÓN TEMPORAL PARA DEPURACIÓN: Se eliminó la redirección de salida de cmake >>>
+sudo -u "$SUDO_USER" cmake ..
+# <<< FIN DE LA MODIFICACIÓN TEMPORAL >>>
+
 if [ $? -ne 0 ]; then
     handle_error "Descargar y instalar Polybar" "Error al ejecutar cmake para Polybar."
 fi
