@@ -74,7 +74,7 @@ cd # usar estos comandos de forma individual
 git clone https://github.com/NvChad/starter ~/.config/nvim
 mkdir /opt/nvim
 cd /opt/nvim
-mv /home/sinh/Entorno-Linux/neovim/nvim-linux64 .
+mv /home/USUARIO/Entorno-Linux/neovim/nvim-linux64 .
 cd /opt/nvim/nvim-linux64/bin
 ./nvim
 ```
@@ -99,7 +99,7 @@ source ~/.zshrc
 ```bash
 sudo tee /usr/local/bin/kitty > /dev/null << 'EOF'
 #!/usr/bin/env bash
-exec /home/sinh/.local/kitty.app/bin/kitty "$@"
+exec /home/USUARIO/.local/kitty.app/bin/kitty "$@"
 EOF
 sudo chmod +x /usr/local/bin/kitty
 ```
@@ -108,7 +108,7 @@ Modificar sxhkdrc
 
 `sudo nvim ~/.config/sxhkd/sxhkdrc`
 
-`/home/sinh/.local/kitty.app/bin/kitty`
+`/home/USUARIO/.local/kitty.app/bin/kitty`
 
 `pkill -USR1 -x sxhkd`
 
