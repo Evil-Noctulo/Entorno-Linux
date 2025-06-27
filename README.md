@@ -172,6 +172,7 @@ Configurar p10k
 
 y agregar estas 3 líneas
 ![zsh](images/zsh.png)
+Comentamos todo el bloque
 ![zsh](images/zsh2.png)
 ####
 # Rutas
