@@ -65,6 +65,13 @@ git clone https://github.com/NvChad/starter ~/.config/nvim
 nvim
 ```
 
+## Configurar zsh
+
+`nano ~/.p10k.zsh`
+
+y agregar estas 3 líneas
+![zsh](images/zsh.png)
+![zsh](images/zsh2.png)
 ####
 # Rutas
 
