@@ -132,7 +132,7 @@ super + shift + g
 super + shift + f
   /usr/bin/firefox &> /dev/null & disown
 
-# Flameshop
+# Flameshot
 super + shift + s
   /usr/bin/flameshot gui
 
