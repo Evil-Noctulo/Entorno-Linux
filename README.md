@@ -23,7 +23,7 @@ sudo ./install.sh
 ![instalacion](images/instalacion.png)
 
 Después de la instalación, asegúrate de seleccionar BSPWM
- ![bspwm](images/bspwm)
+ ![bspwm](images/bspwm.png)
 
 ### Problemas comunes
 
