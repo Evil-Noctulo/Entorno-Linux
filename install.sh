@@ -65,6 +65,7 @@ declare -a ALL_TASKS=(
     "Crear enlace simbólico batcat"
     "Realizar actualización final del sistema"
     "Reiniciar sesión de usuario"
+    "Este Proceso puede demorar 10 minutos aproximadamente"
 )
 
 # Array para guardar las tareas completadas
@@ -181,18 +182,17 @@ mark_task_completed "Instalar Kitty"
 
 # Crear directorios de configuración
 sudo -u $SUDO_USER mkdir -p "$user_home/.config/bspwm" "$user_home/.config/sxhkd" "$user_home/.config/bspwm/scripts" "$user_home/fondos"
-sudo -u $SUDO_USER cp $user_home/KaliEntorno/fondos/* $user_home/fondos/
+sudo -u $SUDO_USER cp $user_home/Entorno-Linux/fondos/* $user_home/fondos/
 mark_task_completed "Crear directorios de configuración"
 
 # Copiar los archivos de configuración a las carpetas de configuración
-# Asegúrese de que estos pasos se ejecuten después de que el repositorio KaliEntorno se haya clonado manualmente
-sudo -u $SUDO_USER cp "$user_home/KaliEntorno/Config/bspwm/bspwmrc" "$user_home/.config/bspwm/"
-sudo -u $SUDO_USER cp "$user_home/KaliEntorno/Config/bspwm/setup_monitors.sh" "$user_home/.config/bspwm/"
-sudo -u $SUDO_USER cp "$user_home/KaliEntorno/Config/sxhkd/sxhkdrc" "$user_home/.config/sxhkd/"
+sudo -u $SUDO_USER cp "$user_home/Entorno-Linux/Config/bspwm/bspwmrc" "$user_home/.config/bspwm/"
+sudo -u $SUDO_USER cp "$user_home/Entorno-Linux/Config/bspwm/setup_monitors.sh" "$user_home/.config/bspwm/"
+sudo -u $SUDO_USER cp "$user_home/Entorno-Linux/Config/sxhkd/sxhkdrc" "$user_home/.config/sxhkd/"
 mark_task_completed "Copiar archivos de configuración de bspwm y sxhkd"
 
 # Copiar el script bspwm_resize al directorio de scripts
-sudo -u $SUDO_USER cp "$user_home/KaliEntorno/Config/bspwm/scripts/bspwm_resize" "$user_home/.config/bspwm/scripts/"
+sudo -u $SUDO_USER cp "$user_home/Entorno-Linux/Config/bspwm/scripts/bspwm_resize" "$user_home/.config/bspwm/scripts/"
 # Hacer ejecutable el script bspwmrc y bspwm_resize
 chmod +x "$user_home/.config/bspwm/bspwmrc"
 chmod +x "$user_home/.config/bspwm/scripts/bspwm_resize"
@@ -276,15 +276,15 @@ if [ $? -ne 0 ]; then
 fi
 mark_task_completed "Instalar bspwm desde los repositorios"
 
-# Copiar todos los archivos de fuentes de KaliEntorno a /usr/local/share/fonts
+# Copiar todos los archivos de fuentes de Entorno-linx /usr/local/share/fonts
 echo "Copiando fuentes personalizadas..."
-sudo cp "$user_home/KaliEntorno/fonts/"* /usr/local/share/fonts/
+sudo cp "$user_home/Entorno-Linux/fonts/"* /usr/local/share/fonts/
 mark_task_completed "Copiar fuentes personalizadas"
 
 echo "Copiando la configuración de Kitty..."
 mkdir -p "$user_home/.config/kitty"
 # Asegúrate de que el directorio exista
-cp -r "$user_home/KaliEntorno/Config/kitty/." "$user_home/.config/kitty/"
+cp -r "$user_home/Entorno-Linux/Config/kitty/." "$user_home/.config/kitty/"
 mark_task_completed "Copiar configuración de Kitty"
 
 # Instalar Zsh
@@ -361,12 +361,12 @@ mark_task_completed "Crear directorio de configuración de Polybar"
 
 # Copiar los archivos de configuración de Polybar
 echo "Copiando archivos de configuración de Polybar..."
-sudo -u $SUDO_USER cp -a $user_home/KaliEntorno/Config/polybar/. "$user_home/.config/polybar/"
+sudo -u $SUDO_USER cp -a $user_home/Entorno-Linux/Config/polybar/. "$user_home/.config/polybar/"
 echo "Archivos de configuración de Polybar copiados."
 mark_task_completed "Copiar archivos de configuración de Polybar"
 
 echo "Copiando fuentes de Polybar al directorio del sistema..."
-sudo cp -r "$user_home/KaliEntorno/Config/polybar/fonts/"* /usr/share/fonts/truetype/
+sudo cp -r "$user_home/Entorno-Linux/Config/polybar/fonts/"* /usr/share/fonts/truetype/
 mark_task_completed "Copiar fuentes de Polybar"
 
 # Actualizar la caché de fuentes
@@ -386,7 +386,7 @@ mark_task_completed "Crear directorio de configuración de Picom"
 
 # Copiar el archivo de configuración de picom al directorio de configuración de picom del usuario no privilegiado
 echo "Copiando archivo de configuración picom.conf a la carpeta de configuración de picom..."
-sudo -u $SUDO_USER cp "$user_home/KaliEntorno/Config/picom/picom.conf" "$user_home/.config/picom/picom.conf"
+sudo -u $SUDO_USER cp "$user_home/Entorno-Linux/Config/picom/picom.conf" "$user_home/.config/picom/picom.conf"
 if [ $? -ne 0 ]; then
     echo "Error al copiar el archivo picom.conf. Abortando."
     exit 1
@@ -432,7 +432,7 @@ mark_task_completed "Configurar Powerlevel10k para root"
 
 # Copiar el archivo .zshrc del repositorio al directorio home del usuario no privilegiado
 echo "Copiando el archivo .zshrc desde el repositorio al directorio home del usuario..."
-sudo -u $SUDO_USER cp "$user_home/KaliEntorno/Config/zshrc/user/.zshrc" "$user_home/"
+sudo -u $SUDO_USER cp "$user_home/Entorno-Linux/Config/zshrc/user/.zshrc" "$user_home/"
 if [ $? -ne 0 ]; then
     echo "Error al copiar el archivo .zshrc. Abortando."
     exit 1
@@ -448,16 +448,16 @@ mark_task_completed "Ajustar permisos de .zshrc de usuario"
 
 # Copiar el archivo .zshrc de root desde el repositorio a /root
 echo "Copiando el archivo .zshrc de root..."
-cp "$user_home/KaliEntorno/Config/zshrc/root/.zshrc" /root/.zshrc
+cp "$user_home/Entorno-Linux/Config/zshrc/root/.zshrc" /root/.zshrc
 chown root:root /root/.zshrc
 chmod 644 /root/.zshrc
 echo "El archivo .zshrc de root ha sido copiado con los permisos adecuados."
 mark_task_completed "Copiar .zshrc de root"
 
-# Copiar todos los archivos de la carpeta lsd del repositorio KaliEntorno a /root (esto parece un error, debería ser Downloads o un lugar temporal)
+# Copiar todos los archivos de la carpeta lsd del repositorio Entorno-Linux a /root (esto parece un error, debería ser Downloads o un lugar temporal)
 # Asumiendo que quieres copiarlos a Downloads para luego instalarlos con dpkg
 echo "Copiando archivos de lsd a $user_home/Downloads..."
-sudo cp -a "$user_home/KaliEntorno/lsd/." "$user_home/Downloads/"
+sudo cp -a "$user_home/Entorno-Linux/lsd/." "$user_home/Downloads/"
 if [ $? -ne 0 ]; then
     echo "Error al copiar archivos de lsd. Abortando."
     exit 1
@@ -476,9 +476,9 @@ fi
 echo "bat y lsd instalados correctamente."
 mark_task_completed "Instalar bat y lsd"
 
-# Reemplazar el archivo .p10k.zsh con la versión personalizada del repositorio KaliEntorno
+# Reemplazar el archivo .p10k.zsh con la versión personalizada del repositorio Entorno-Linux
 echo "Actualizando archivo .p10k.zsh para el usuario no privilegiado..."
-sudo -u $SUDO_USER cp "$user_home/KaliEntorno/Config/Power10kNormal/.p10k.zsh" "$user_home/.p10k.zsh"
+sudo -u $SUDO_USER cp "$user_home/Entorno-Linux/Config/Power10kNormal/.p10k.zsh" "$user_home/.p10k.zsh"
 if [ $? -ne 0 ]; then
     echo "Error al actualizar .p10k.zsh. Abortando."
     exit 1
@@ -488,7 +488,7 @@ mark_task_completed "Actualizar .p10k.zsh de usuario"
 
 # Reemplazar el archivo .p10k.zsh con la versión personalizada para root
 echo "Actualizando archivo .p10k.zsh para el usuario root..."
-cp "$user_home/KaliEntorno/Config/Power10kRoot/.p10k.zsh" /root/.p10k.zsh
+cp "$user_home/Entorno-Linux/Config/Power10kRoot/.p10k.zsh" /root/.p10k.zsh
 if [ $? -ne 0 ]; then
     echo "Error al actualizar .p10k.zsh para root. Abortando."
     exit 1
@@ -510,9 +510,9 @@ mark_task_completed "Crear enlace simbólico .zshrc de root"
 # Crear una carpeta llamada bin en $user_home/.config/
 echo "Creando la carpeta bin en $user_home/.config/..."
 sudo -u $SUDO_USER mkdir -p "$user_home/.config/bin"
-# Copiar todo lo que está en $user_home/KaliEntorno/bin a $user_home/.config/bin
+# Copiar todo lo que está en $user_home/Entorno-Linux/bin a $user_home/.config/bin
 echo "Copiando scripts al directorio bin de $user_home/.config/..."
-sudo -u $SUDO_USER cp "$user_home/KaliEntorno/bin/"* "$user_home/.config/bin/"
+sudo -u $SUDO_USER cp "$user_home/Entorno-Linux/bin/"* "$user_home/.config/bin/"
 # Dar permiso de ejecución a los scripts específicos en $user_home/.config/bin/
 echo "Asignando permisos de ejecución a los scripts..."
 sudo -u $SUDO_USER chmod +x "$user_home/.config/bin/ethernet_status.sh"
@@ -536,7 +536,7 @@ mark_task_completed "Crear directorio zsh-sudo-plugin"
 
 # Copiar el archivo sudo.plugin.zsh a /usr/share/zsh-sudo-plugin con los permisos adecuados
 echo "Copiando el archivo sudo.plugin.zsh a /usr/share/zsh-sudo-plugin..."
-cp "$user_home/KaliEntorno/sudoPlugin/sudo.plugin.zsh" /usr/share/zsh-sudo-plugin/
+cp "$user_home/Entorno-Linux/sudoPlugin/sudo.plugin.zsh" /usr/share/zsh-sudo-plugin/
 if [ $? -ne 0 ]; then
     echo "Error al copiar el archivo sudo.plugin.zsh. Abortando."
     exit 1
