@@ -36,32 +36,7 @@ sudo ./install.sh
 Después de la instalación, asegúrate de seleccionar BSPWM
  ![bspwm](images/bspwm.png)
 
-### Instalación de NVChad
-
-#### Para Root:
-
-```bash
-sudo su # usar este comandos de forma individual
-cd # usar este comandos de forma individual
-
-git clone https://github.com/NvChad/starter ~/.config/nvim
-mkdir /opt/nvim
-cd /opt/nvim
-mv /home/USUARIO/Entorno-Linux/neovim/nvim-linux64 .
-cd /opt/nvim/nvim-linux64/bin
-./nvim
-```
-
-#### Para Usuario No Privilegiado:
-
-```bash
-cd # usar este comandos de forma individual
-
-git clone https://github.com/NvChad/starter ~/.config/nvim
-nvim
-```
-
-## problema con nvim
+### Instalación de NVChad y problema con nvim
 
 puede que al usar nvim tengamos este error
 
@@ -161,6 +136,7 @@ exit
 y agregar estas 3 líneas
 ![zsh](images/zsh.png)
 Comentamos todo el bloque
+
 ![zsh](images/zsh2.png)
 ####
 ##📁 Rutas de Configuración
