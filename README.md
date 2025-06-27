@@ -1,7 +1,7 @@
 
 # Entorno de S4vitar en Linux 100% Funcional
 
-![image](https://github.com/user-attachments/assets/aefbc484-a87c-4fc2-906a-b7e77bccc18e)
+![image](images/entorno.png)
 
 Bienvenidos a la guía de personalización del entorno de S4vitar en Linux. Aquí encontrarás todos los pasos necesarios para una instalación completa y funcional.
 
