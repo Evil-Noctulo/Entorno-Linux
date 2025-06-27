@@ -10,10 +10,10 @@ Esta es una guía de personalización del entorno de S4vitar en Linux, adaptada 
 
 Aquí encontrarás todos los pasos necesarios para dejar tu entorno al estilo S4vitar, con herramientas visuales, atajos eficientes y una configuración lista para usar.
  
-##📜 Descripción
+## 📜 Descripción
 Este script está diseñado para sistemas operativos Linux en inglés. Si tu sistema está en español, simplemente reemplaza "Downloads" por "Descargas" dentro del archivo install.sh.
 
-##🎥 Tutorial paso a paso
+## 🎥 Tutorial paso a paso
 Puedess seguir el video tutorial completo en mi [canal de YouTube](https://www.youtube.com/@CristianSinH-Ciber).
 Si te resulta útil el contenido, no olvides suscribirte y seguirme en [LinkedIn](https://www.linkedin.com/in/cristian-hsilva).
 
