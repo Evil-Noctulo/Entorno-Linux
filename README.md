@@ -5,10 +5,14 @@
 
 Bienvenidos a la guía de personalización del entorno de S4vitar en Linux. Aquí encontrarás todos los pasos necesarios para una instalación completa y funcional.
 
-## Video Tutorial
 
-Puedes seguir el video tutorial paso a paso en mi [canal de YouTube](https://www.youtube.com/@CristianSinH-Ciber). Si el contenido es de tu agrado, considera suscribirte y seguirme en [LinkedIn](https://www.linkedin.com/in/cristian-hsilva).
-Recuerda que este script esta diseñado para un sistema operativo Linux en Ingles, si lo quieres en español, cambia en el install.sh Downloads por Descargas. 
+##📜 Descripción
+Este script está diseñado para sistemas operativos Linux en inglés. Si tu sistema está en español, simplemente reemplaza "Downloads" por "Descargas" dentro del archivo install.sh.
+
+##🎥 Tutorial paso a paso
+Puedess seguir el video tutorial completo en mi [canal de YouTube](https://www.youtube.com/@CristianSinH-Ciber).
+Si te resulta útil el contenido, no olvides suscribirte y seguirme en [LinkedIn](https://www.linkedin.com/in/cristian-hsilva).
+
 
 ## Instalación
 
@@ -25,7 +29,7 @@ sudo ./install.sh
 Después de la instalación, asegúrate de seleccionar BSPWM
  ![bspwm](images/bspwm.png)
 
-### Instalación de Neovim
+### Instalación de NVChad
 
 #### Para Root:
 
@@ -143,29 +147,6 @@ chown root:root /usr/local/share/zsh/site-functions/_bspc
 exit
 ```
 
-
-# Rutas
-
-Polybar (Barra de arriba)
-
-`~/.config/polybar`
-
-bspwn
-
-`~/.config/bspwm`
-
-sxhkd (short cut)
-
-`~/.config/sxhkd`
-
-Picom
-
-`~/.config/picom`
-
-Configurar p10k
-
-`p10k configure`
-
 ## Configurar zsh
 
 `nano ~/.p10k.zsh`
@@ -175,23 +156,20 @@ y agregar estas 3 líneas
 Comentamos todo el bloque
 ![zsh](images/zsh2.png)
 ####
-# Rutas
+##📁 Rutas de Configuración
+A continuación se detallan las rutas donde se almacenan los archivos de configuración de los componentes principales del entorno:
 
-Polybar
+Polybar(Barra):
+~/.config/polybar/current.ini
 
-`~/.config/polybar`
+bspwm:
+~/.config/bspwm/bpwmrc
 
-bspwn
+sxhkd (shortcuts):
+~/.config/sxhkd/sxhkdrc
 
-`~/.config/bspwm`
-
-sxhkd (short cut)
-
-`~/.config/sxhkd`
-
-Picom
-
-`~/.config/picom`
+Picom (compositor):
+~/.config/picom
 
 Atajos (Personalización de entorno en Linux)
 
@@ -259,9 +237,8 @@ Atajos (Personalización de entorno en Linux)
 
 ---
 
-## Contacto
+📬 Contacto
+Si tienes preguntas o necesitas ayuda, no dudes en escribirme a través de mi perfil de LinkedIn.
 
-Si tienes preguntas o necesitas ayuda, no dudes en escribirme a mi [LinkedIn](https://www.linkedin.com/in/cristian-hsilva).
-
-Gracias
+¡Gracias por tu interés y apoyo!
 
