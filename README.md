@@ -1,7 +1,7 @@
 
 # Entorno de S4vitar en Linux 100% Funcional
 
-![image](images/entorno.png)
+![image](images/entorno1.png)
 👋 Bienvenido
 Esta es una guía de personalización del entorno de S4vitar en Linux, adaptada y mejorada para lograr una instalación completa, funcional y visualmente atractiva.
 
@@ -128,6 +128,9 @@ compaudit
 chown root:root /usr/local/share/zsh/site-functions/_bspc
 exit
 ```
+Otro problema ee que la pantalla se nos vea asi, y para solucionarlo apreta 
+
+[pantalla](images/problemapantalla.png)
 
 ## Configurar zsh
 
