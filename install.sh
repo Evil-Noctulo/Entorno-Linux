@@ -80,6 +80,7 @@ display_checklist() {
         local found=0
         for completed_item in "${COMPLETED_TASKS[@]}"; do
             [[ "$task_item" == "$completed_item" ]] && { found=1; break; }
+        F
         done
 
         if [[ "$found" -eq 1 ]]; then
@@ -91,6 +92,13 @@ display_checklist() {
     echo "---------------------------------"
     echo "" # Deja una línea en blanco al final de la checklist
 }
+
+# Función para marcar una tarea como completada y actualizar la pantalla
+mark_task_completed() {
+    COMPLETED_TASKS+=("$1")
+    display_checklist
+}
+
 
 # Función para manejar errores y salir (si es necesario)
 handle_error() {
@@ -146,10 +154,19 @@ read -r # Espera a que el usuario presione Enter
 mark_task_completed "Mostrar aviso inicial" # Marca la tarea de aviso como completada
 
 # Actualizar el sistema
-sudo apt update > /dev/null 2>&1 && parrot-upgrade -y > /dev/null 2>&1
+sudo apt update > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Actualizar el sistema" "Error durante la actualización del sistema."
+    handle_error "Actualizar el sistema" "Error al ejecutar 'apt update'."
 fi
+
+# Intentar parrot-upgrade, si falla, usar apt upgrade
+if ! parrot-upgrade -y > /dev/null 2>&1; then
+    echo "Advertencia: 'parrot-upgrade' falló o no está disponible. Intentando 'apt upgrade'." >&2
+    if ! sudo apt upgrade -y > /dev/null 2>&1; then
+        handle_error "Actualizar el sistema" "Error durante la actualización del sistema con 'apt upgrade'."
+    fi
+fi
+sudo apt autoremove -y > /dev/null 2>&1 # Limpia paquetes viejos
 mark_task_completed "Actualizar el sistema"
 
 # Instalar dependencias principales
@@ -157,23 +174,24 @@ deps=(
     build-essential git vim libxcb-util0-dev libxcb-ewmh-dev
     libxcb-randr0-dev libxcb-icccm4-dev libxcb-keysyms1-dev
     libxcb-xinerama0-dev libasound2-dev libxcb-xtest0-dev
-    libxcb-shape0-dev
+    libxcb-shape0-dev libxcb-xinput-dev # Añadida libxcb-xinput-dev
 )
 for dep in "${deps[@]}"; do
     if ! sudo apt install -y "$dep" > /dev/null 2>&1; then
-        # No se usa handle_error aquí para permitir que el script continúe si una dependencia menor falla.
-        # Si prefieres que el script aborte ante cualquier fallo de dependencia, cambia a handle_error.
-        echo "Advertencia: La dependencia '$dep' no se instaló correctamente (puede ser una advertencia menor)." >&2
+        echo "Advertencia: La dependencia '$dep' no se instaló correctamente. Esto podría causar problemas más adelante." >&2
     fi
 done
 mark_task_completed "Instalar dependencias principales"
 
 # Definir directorio home del usuario
-user_home=$(getent passwd "$SUDO_USER" | cut -d: -f6) > /dev/null 2>&1
+user_home=$(getent passwd "$SUDO_USER" | cut -d: -f6)
+if [ -z "$user_home" ]; then
+    handle_error "Definir directorio home del usuario" "No se pudo obtener el directorio home para el usuario $SUDO_USER."
+fi
 mark_task_completed "Definir directorio home del usuario"
 
 # Clonar bspwm y sxhkd
-cd "$user_home" || handle_error "Clonar bspwm y sxhkd" "No se pudo cambiar al directorio home del usuario."
+cd "$user_home" || handle_error "Clonar bspwm y sxhkd" "No se pudo cambiar al directorio home del usuario: $user_home."
 sudo -u "$SUDO_USER" git clone https://github.com/baskerville/bspwm.git > /dev/null 2>&1
 if [ $? -ne 0 ]; then
     handle_error "Clonar bspwm y sxhkd" "Error al clonar bspwm."
@@ -188,11 +206,11 @@ mark_task_completed "Clonar bspwm y sxhkd"
 cd "$user_home/bspwm" || handle_error "Compilar e instalar bspwm" "No se pudo cambiar al directorio de bspwm."
 sudo -u "$SUDO_USER" make > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Compilar e instalar bspwm" "Error al compilar bspwm."
+    handle_error "Compilar e instalar bspwm" "Error al compilar bspwm. Revisa los logs para dependencias faltantes."
 fi
 sudo make install > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Compilar e instalar bspwm" "Error al instalar bspwm."
+    handle_error "Compilar e instalar bspwm" "Error al instalar bspwm. Revisa los logs."
 fi
 mark_task_completed "Compilar e instalar bspwm"
 
@@ -200,25 +218,25 @@ mark_task_completed "Compilar e instalar bspwm"
 cd "$user_home/sxhkd" || handle_error "Compilar e instalar sxhkd" "No se pudo cambiar al directorio de sxhkd."
 sudo -u "$SUDO_USER" make > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Compilar e instalar sxhkd" "Error al compilar sxhkd."
+    handle_error "Compilar e instalar sxhkd" "Error al compilar sxhkd. Revisa los logs para dependencias faltantes."
 fi
 sudo make install > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Compilar e instalar sxhkd" "Error al instalar sxhkd."
+    handle_error "Compilar e instalar sxhkd" "Error al instalar sxhkd. Revisa los logs."
 fi
 mark_task_completed "Compilar e instalar sxhkd"
 
 # Instalar libxinerama
 sudo apt install -y libxinerama1 libxinerama-dev > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Instalar libxinerama1 y libxinerama-dev" "Error al instalar libxinerama."
+    handle_error "Instalar libxinerama1 y libxinerama-dev" "Error al instalar libxinerama. Asegúrate de que los repositorios estén correctos."
 fi
 mark_task_completed "Instalar libxinerama1 y libxinerama-dev"
 
 # Instalar Kitty
 sudo apt install -y kitty > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Instalar Kitty" "Error al instalar Kitty."
+    handle_error "Instalar Kitty" "Error al instalar Kitty. Asegúrate de que los repositorios estén correctos."
 fi
 mark_task_completed "Instalar Kitty"
 
@@ -229,11 +247,11 @@ sudo -u "$SUDO_USER" mkdir -p \
     "$user_home/.config/bspwm/scripts" \
     "$user_home/fondos" > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Crear directorios de configuración" "Error al crear directorios de configuración."
+    handle_error "Crear directorios de configuración" "Error al crear directorios de configuración para el usuario."
 fi
 sudo -u "$SUDO_USER" cp -r "$user_home/Entorno-Linux/fondos/"* "$user_home/fondos/" > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Crear directorios de configuración" "Error al copiar fondos."
+    handle_error "Crear directorios de configuración" "Error al copiar fondos. Asegúrate de que '$user_home/Entorno-Linux/fondos/' exista y tenga permisos."
 fi
 mark_task_completed "Crear directorios de configuración"
 
@@ -241,35 +259,35 @@ mark_task_completed "Crear directorios de configuración"
 # Modificación aquí para evitar copiar el directorio 'scripts' directamente con el '*'
 sudo -u "$SUDO_USER" cp "$user_home/Entorno-Linux/Config/bspwm/bspwmrc" "$user_home/.config/bspwm/" > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Copiar archivos de configuración de bspwm y sxhkd" "Error al copiar bspwmrc."
+    handle_error "Copiar archivos de configuración de bspwm y sxhkd" "Error al copiar bspwmrc. Asegúrate de que '$user_home/Entorno-Linux/Config/bspwm/bspwmrc' exista."
 fi
 sudo -u "$SUDO_USER" cp "$user_home/Entorno-Linux/Config/bspwm/setup_monitors.sh" "$user_home/.config/bspwm/" > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Copiar archivos de configuración de bspwm y sxhkd" "Error al copiar setup_monitors.sh."
+    handle_error "Copiar archivos de configuración de bspwm y sxhkd" "Error al copiar setup_monitors.sh. Asegúrate de que exista."
 fi
 sudo -u "$SUDO_USER" cp "$user_home/Entorno-Linux/Config/bspwm/setup_monitorsPortatil.sh" "$user_home/.config/bspwm/" > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Copiar archivos de configuración de bspwm y sxhkd" "Error al copiar setup_monitorsPortatil.sh."
+    handle_error "Copiar archivos de configuración de bspwm y sxhkd" "Error al copiar setup_monitorsPortatil.sh. Asegúrate de que exista."
 fi
 sudo -u "$SUDO_USER" cp "$user_home/Entorno-Linux/Config/sxhkd/sxhkdrc" "$user_home/.config/sxhkd/" > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Copiar archivos de configuración de bspwm y sxhkd" "Error al copiar sxhkdrc."
+    handle_error "Copiar archivos de configuración de bspwm y sxhkd" "Error al copiar sxhkdrc. Asegúrate de que exista."
 fi
 mark_task_completed "Copiar archivos de configuración de bspwm y sxhkd"
 
 # Copiar el script bspwm_resize al directorio de scripts
 sudo -u "$SUDO_USER" cp "$user_home/Entorno-Linux/Config/bspwm/scripts/bspwm_resize" "$user_home/.config/bspwm/scripts/" > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Copiar y hacer ejecutable bspwm_resize" "Error al copiar bspwm_resize."
+    handle_error "Copiar y hacer ejecutable bspwm_resize" "Error al copiar bspwm_resize. Asegúrate de que exista."
 fi
 # Hacer ejecutable el script bspwmrc y bspwm_resize
 chmod +x "$user_home/.config/bspwm/bspwmrc" > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Copiar y hacer ejecutable bspwm_resize" "Error al dar permisos a bspwmrc."
+    handle_error "Copiar y hacer ejecutable bspwm_resize" "Error al dar permisos de ejecución a bspwmrc."
 fi
 chmod +x "$user_home/.config/bspwm/scripts/bspwm_resize" > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Copiar y hacer ejecutable bspwm_resize" "Error al dar permisos a bspwm_resize."
+    handle_error "Copiar y hacer ejecutable bspwm_resize" "Error al dar permisos de ejecución a bspwm_resize."
 fi
 mark_task_completed "Copiar y hacer ejecutable bspwm_resize"
 
@@ -282,30 +300,30 @@ sudo apt install -y \
     libxcb-ewmh-dev libxcb-icccm4-dev \
     libxcb-xkb-dev libxcb-xrm-dev \
     libxcb-cursor-dev libasound2-dev libpulse-dev \
-    libjsoncpp-dev libmpdclient-dev libuv1-dev libnl-genl-3-dev > /dev/null 2>&1
+    libjsoncpp-dev libmpdclient-dev libuv1-dev libnl-genl-3-dev \
+    libxcb-xinput-dev # Asegurada esta dependencia aquí también
 if [ $? -ne 0 ]; then
-    handle_error "Instalar dependencias adicionales para Polybar" "Error al instalar dependencias de Polybar."
+    handle_error "Instalar dependencias adicionales para Polybar" "Error al instalar algunas dependencias de Polybar. Revisa la conexión o los repositorios."
 fi
 mark_task_completed "Instalar dependencias adicionales para Polybar"
 
 # Descargar e instalar Polybar como usuario no privilegiado
-cd "$user_home/Downloads" || handle_error "Descargar y instalar Polybar" "No se pudo cambiar al directorio Downloads."
-sudo -u "$SUDO_USER" git clone --recursive https://github.com/polybar/polybar > /dev/null 2>&1
+cd "$user_home/Downloads" || handle_error "Descargar y instalar Polybar" "No se pudo cambiar al directorio Downloads ($user_home/Downloads)."
+sudo -u "$SUDO_USER" git clone --recursive https://github.com/polybar/polybar
 if [ $? -ne 0 ]; then
-    handle_error "Descargar y instalar Polybar" "Error al clonar Polybar."
+    handle_error "Descargar y instalar Polybar" "Error al clonar Polybar. Revisa tu conexión a internet o los permisos."
 fi
-cd polybar && mkdir build && cd build || handle_error "Descargar y instalar Polybar" "No se pudo preparar el directorio de Polybar."
+cd polybar && sudo -u "$SUDO_USER" mkdir build && cd build || handle_error "Descargar y instalar Polybar" "No se pudo preparar el directorio de Polybar."
 
-# <<< MODIFICACIÓN TEMPORAL PARA DEPURACIÓN: Se eliminó la redirección de salida de cmake >>>
+# IMPORTANTE: Aquí la salida de cmake NO se redirige para ver errores específicos.
+# Si la instalación es exitosa, puedes añadir "> /dev/null 2>&1" al final de la línea.
 sudo -u "$SUDO_USER" cmake ..
-# <<< FIN DE LA MODIFICACIÓN TEMPORAL >>>
-
 if [ $? -ne 0 ]; then
-    handle_error "Descargar y instalar Polybar" "Error al ejecutar cmake para Polybar."
+    handle_error "Descargar y instalar Polybar" "Error al ejecutar cmake para Polybar. Revisa la salida de cmake para dependencias faltantes."
 fi
 sudo -u "$SUDO_USER" make -j"$(nproc)" > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Descargar y instalar Polybar" "Error al compilar Polybar."
+    handle_error "Descargar y instalar Polybar" "Error al compilar Polybar. Revisa los logs de compilación."
 fi
 sudo make install > /dev/null 2>&1
 if [ $? -ne 0 ]; then
@@ -322,36 +340,37 @@ sudo apt install -y \
     libxcb-present-dev libxcb-xinerama0-dev \
     libpixman-1-dev libdbus-1-dev libconfig-dev \
     libgl1-mesa-dev libpcre2-dev libevdev-dev \
-    uthash-dev libev-dev libx11-xcb-dev libxcb-glx0-dev > /dev/null 2>&1
+    uthash-dev libev-dev libx11-xcb-dev libxcb-glx0-dev
 if [ $? -ne 0 ]; then
-    handle_error "Instalar dependencias de Picom" "Error al instalar dependencias de Picom."
+    handle_error "Instalar dependencias de Picom" "Error al instalar dependencias de Picom. Revisa la conexión o los repositorios."
 fi
 mark_task_completed "Instalar dependencias de Picom"
 
 # Instalar libpcre3
 sudo apt install -y libpcre3 libpcre3-dev > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Instalar libpcre3 y libpcre3-dev" "Error al instalar libpcre3."
+    handle_error "Instalar libpcre3 y libpcre3-dev" "Error al instalar libpcre3. Asegúrate de que los repositorios estén correctos."
 fi
 mark_task_completed "Instalar libpcre3 y libpcre3-dev"
 
 # Descargar e instalar Picom como usuario no privilegiado
-cd "$user_home/Downloads" || handle_error "Descargar y instalar Picom" "No se pudo cambiar al directorio Downloads."
-sudo -u "$SUDO_USER" git clone https://github.com/ibhagwan/picom.git > /dev/null 2>&1
+cd "$user_home/Downloads" || handle_error "Descargar y instalar Picom" "No se pudo cambiar al directorio Downloads ($user_home/Downloads)."
+sudo -u "$SUDO_USER" git clone https://github.com/ibhagwan/picom.git
 if [ $? -ne 0 ]; then
-    handle_error "Descargar y instalar Picom" "Error al clonar Picom."
+    handle_error "Descargar y instalar Picom" "Error al clonar Picom. Revisa tu conexión a internet o los permisos."
 fi
 cd picom && sudo -u "$SUDO_USER" git submodule update --init --recursive > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Descargar y instalar Picom" "Error al actualizar submódulos de Picom."
+    handle_error "Descargar y instalar Picom" "Error al actualizar submódulos de Picom. Revisa la conexión."
 fi
-sudo -u "$SUDO_USER" meson --buildtype=release . build > /dev/null 2>&1
+# IMPORTANTE: Aquí la salida de meson NO se redirige para ver errores específicos.
+sudo -u "$SUDO_USER" meson --buildtype=release . build
 if [ $? -ne 0 ]; then
-    handle_error "Descargar y instalar Picom" "Error al configurar meson para Picom."
+    handle_error "Descargar y instalar Picom" "Error al configurar meson para Picom. Revisa la salida para dependencias faltantes."
 fi
 sudo -u "$SUDO_USER" ninja -C build > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Descargar y instalar Picom" "Error al compilar Picom."
+    handle_error "Descargar y instalar Picom" "Error al compilar Picom. Revisa los logs de compilación."
 fi
 sudo ninja -C build install > /dev/null 2>&1
 if [ $? -ne 0 ]; then
@@ -376,25 +395,25 @@ mark_task_completed "Instalar bspwm desde los repositorios"
 # Copiar fuentes personalizadas
 sudo cp -r "$user_home/Entorno-Linux/fonts/"* /usr/local/share/fonts/ > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Copiar fuentes personalizadas" "Error al copiar fuentes."
+    handle_error "Copiar fuentes personalizadas" "Error al copiar fuentes. Asegúrate de que '$user_home/Entorno-Linux/fonts/' exista y tenga contenido."
 fi
 mark_task_completed "Copiar fuentes personalizadas"
 
 # Copiar configuración de Kitty
-mkdir -p "$user_home/.config/kitty" > /dev/null 2>&1
+sudo -u "$SUDO_USER" mkdir -p "$user_home/.config/kitty" > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Copiar configuración de Kitty" "Error al crear directorio de config de Kitty."
+    handle_error "Copiar configuración de Kitty" "Error al crear directorio de config de Kitty para el usuario."
 fi
-cp -r "$user_home/Entorno-Linux/Config/kitty/." "$user_home/.config/kitty/" > /dev/null 2>&1
+sudo -u "$SUDO_USER" cp -r "$user_home/Entorno-Linux/Config/kitty/." "$user_home/.config/kitty/" > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Copiar configuración de Kitty" "Error al copiar config de Kitty."
+    handle_error "Copiar configuración de Kitty" "Error al copiar config de Kitty para el usuario. Asegúrate de que '$user_home/Entorno-Linux/Config/kitty/' exista."
 fi
 mark_task_completed "Copiar configuración de Kitty"
 
 # Instalar Zsh y plugins
 sudo apt install -y zsh zsh-autosuggestions zsh-syntax-highlighting > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Instalar Zsh" "Error al instalar Zsh o sus complementos."
+    handle_error "Instalar Zsh" "Error al instalar Zsh o sus complementos. Revisa los repositorios."
 fi
 mark_task_completed "Instalar Zsh"
 mark_task_completed "Instalar complementos de Zsh"
@@ -432,23 +451,23 @@ fi
 mark_task_completed "Instalar Scrub"
 
 # Clonar blue-sky
-cd "$user_home/Downloads" || handle_error "Clonar repositorio blue-sky" "No se pudo cambiar al directorio Downloads."
+cd "$user_home/Downloads" || handle_error "Clonar repositorio blue-sky" "No se pudo cambiar al directorio Downloads ($user_home/Downloads)."
 sudo -u "$SUDO_USER" git clone https://github.com/VaughnValle/blue-sky \
     "$user_home/Downloads/blue-sky" > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Clonar repositorio blue-sky" "Error al clonar blue-sky."
+    handle_error "Clonar repositorio blue-sky" "Error al clonar blue-sky. Revisa tu conexión a internet o los permisos."
 fi
 mark_task_completed "Clonar repositorio blue-sky"
 
 # Crear y copiar Polybar config
 sudo -u "$SUDO_USER" mkdir -p "$user_home/.config/polybar" > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Crear directorio de configuración de Polybar" "Error al crear directorio de Polybar."
+    handle_error "Crear directorio de configuración de Polybar" "Error al crear directorio de Polybar para el usuario."
 fi
 sudo -u "$SUDO_USER" cp -a "$user_home/Entorno-Linux/Config/polybar/." \
     "$user_home/.config/polybar/" > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Copiar archivos de configuración de Polybar" "Error al copiar config de Polybar."
+    handle_error "Copiar archivos de configuración de Polybar" "Error al copiar config de Polybar. Asegúrate de que '$user_home/Entorno-Linux/Config/polybar/' exista."
 fi
 mark_task_completed "Crear directorio de configuración de Polybar"
 mark_task_completed "Copiar archivos de configuración de Polybar"
@@ -457,7 +476,7 @@ mark_task_completed "Copiar archivos de configuración de Polybar"
 sudo cp -r "$user_home/Entorno-Linux/Config/polybar/fonts/"* \
     /usr/share/fonts/truetype/ > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Copiar fuentes de Polybar" "Error al copiar fuentes de Polybar."
+    handle_error "Copiar fuentes de Polybar" "Error al copiar fuentes de Polybar. Asegúrate de que '$user_home/Entorno-Linux/Config/polybar/fonts/' exista."
 fi
 sudo fc-cache -f -v > /dev/null 2>&1
 if [ $? -ne 0 ]; then
@@ -469,34 +488,34 @@ mark_task_completed "Actualizar caché de fuentes"
 # Crear y copiar Picom conf
 sudo -u "$SUDO_USER" mkdir -p "$user_home/.config/picom" > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Crear directorio de configuración de Picom" "Error al crear directorio de Picom."
+    handle_error "Crear directorio de configuración de Picom" "Error al crear directorio de Picom para el usuario."
 fi
 sudo -u "$SUDO_USER" cp "$user_home/Entorno-Linux/Config/picom/picom.conf" \
     "$user_home/.config/picom/" > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Copiar archivo de configuración de Picom" "Error al copiar config de Picom."
+    handle_error "Copiar archivo de configuración de Picom" "Error al copiar config de Picom. Asegúrate de que '$user_home/Entorno-Linux/Config/picom/picom.conf' exista."
 fi
 mark_task_completed "Crear directorio de configuración de Picom"
 mark_task_completed "Copiar archivo de configuración de Picom"
 
 # Instalar Fastfetch
-cd "$user_home/Downloads" || handle_error "Instalar Fastfetch" "No se pudo cambiar al directorio Downloads."
-sudo -u "$SUDO_USER" git clone https://github.com/fastfetch-cli/fastfetch.git > /dev/null 2>&1
+cd "$user_home/Downloads" || handle_error "Instalar Fastfetch" "No se pudo cambiar al directorio Downloads ($user_home/Downloads)."
+sudo -u "$SUDO_USER" git clone https://github.com/fastfetch-cli/fastfetch.git
 if [ $? -ne 0 ]; then
-    handle_error "Instalar Fastfetch" "Error al clonar Fastfetch."
+    handle_error "Instalar Fastfetch" "Error al clonar Fastfetch. Revisa tu conexión a internet o los permisos."
 fi
 cd fastfetch || handle_error "Instalar Fastfetch" "No se pudo cambiar al directorio de Fastfetch."
 sudo -u "$SUDO_USER" cmake -B build -DCMAKE_BUILD_TYPE=Release > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Instalar Fastfetch" "Error al configurar cmake para Fastfetch."
+    handle_error "Instalar Fastfetch" "Error al configurar cmake para Fastfetch. Revisa la salida de cmake."
 fi
 sudo -u "$SUDO_USER" cmake --build build --config Release --target fastfetch > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Instalar Fastfetch" "Error al compilar Fastfetch."
+    handle_error "Instalar Fastfetch" "Error al compilar Fastfetch. Revisa los logs de compilación."
 fi
 sudo cp build/fastfetch /usr/local/bin/ > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Instalar Fastfetch" "Error al instalar Fastfetch."
+    handle_error "Instalar Fastfetch" "Error al instalar Fastfetch en /usr/local/bin."
 fi
 mark_task_completed "Instalar Fastfetch"
 
@@ -504,12 +523,12 @@ mark_task_completed "Instalar Fastfetch"
 sudo -u "$SUDO_USER" git clone --depth=1 \
     https://github.com/romkatv/powerlevel10k.git "$user_home/powerlevel10k" > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Configurar Powerlevel10k para usuario" "Error al clonar powerlevel10k para usuario."
+    handle_error "Configurar Powerlevel10k para usuario" "Error al clonar powerlevel10k para el usuario."
 fi
 echo 'source $HOME/powerlevel10k/powerlevel10k.zsh-theme' >> \
     "$user_home/.zshrc" > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Configurar Powerlevel10k para usuario" "Error al configurar .zshrc para powerlevel10k de usuario."
+    handle_error "Configurar Powerlevel10k para usuario" "Error al configurar .zshrc para powerlevel10k del usuario."
 fi
 mark_task_completed "Configurar Powerlevel10k para usuario"
 
@@ -527,7 +546,7 @@ mark_task_completed "Configurar Powerlevel10k para root"
 sudo -u "$SUDO_USER" cp "$user_home/Entorno-Linux/Config/zshrc/user/.zshrc" \
     "$user_home/.zshrc" > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Copiar .zshrc de usuario" "Error al copiar .zshrc de usuario."
+    handle_error "Copiar .zshrc de usuario" "Error al copiar .zshrc de usuario. Asegúrate de que '$user_home/Entorno-Linux/Config/zshrc/user/.zshrc' exista."
 fi
 chown "$SUDO_USER":"$SUDO_USER" "$user_home/.zshrc" > /dev/null 2>&1
 if [ $? -ne 0 ]; then
@@ -542,7 +561,7 @@ mark_task_completed "Ajustar permisos de .zshrc de usuario"
 
 cp "$user_home/Entorno-Linux/Config/zshrc/root/.zshrc" /root/.zshrc > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Copiar .zshrc de root" "Error al copiar .zshrc de root."
+    handle_error "Copiar .zshrc de root" "Error al copiar .zshrc de root. Asegúrate de que '$user_home/Entorno-Linux/Config/zshrc/root/.zshrc' exista."
 fi
 chown root:root /root/.zshrc > /dev/null 2>&1
 if [ $? -ne 0 ]; then
@@ -557,7 +576,7 @@ mark_task_completed "Copiar .zshrc de root"
 # Instalar bat y lsd (.deb)
 sudo cp -a "$user_home/Entorno-Linux/lsd/." "$user_home/Downloads/" > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Copiar archivos de lsd" "Error al copiar archivos de lsd a Downloads."
+    handle_error "Copiar archivos de lsd" "Error al copiar archivos de lsd a Downloads. Asegúrate de que '$user_home/Entorno-Linux/lsd/' exista."
 fi
 sudo dpkg -i "$user_home/Downloads/bat_0.24.0_amd64.deb" > /dev/null 2>&1
 if [ $? -ne 0 ]; then
@@ -574,11 +593,11 @@ mark_task_completed "Instalar bat y lsd"
 sudo -u "$SUDO_USER" cp "$user_home/Entorno-Linux/Config/Power10kNormal/.p10k.zsh" \
     "$user_home/.p10k.zsh" > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Actualizar .p10k.zsh de usuario" "Error al actualizar .p10k.zsh de usuario."
+    handle_error "Actualizar .p10k.zsh de usuario" "Error al actualizar .p10k.zsh de usuario. Asegúrate de que '$user_home/Entorno-Linux/Config/Power10kNormal/.p10k.zsh' exista."
 fi
 cp "$user_home/Entorno-Linux/Config/Power10kRoot/.p10k.zsh" /root/.p10k.zsh > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Actualizar .p10k.zsh de root" "Error al actualizar .p10k.zsh de root."
+    handle_error "Actualizar .p10k.zsh de root" "Error al actualizar .p10k.zsh de root. Asegúrate de que '$user_home/Entorno-Linux/Config/Power10kRoot/.p10k.zsh' exista."
 fi
 mark_task_completed "Actualizar .p10k.zsh de usuario"
 mark_task_completed "Actualizar .p10k.zsh de root"
@@ -593,39 +612,39 @@ mark_task_completed "Crear enlace simbólico .zshrc de root"
 # Copiar scripts personalizados a bin
 sudo -u "$SUDO_USER" mkdir -p "$user_home/.config/bin" > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Crear directorio bin en .config" "Error al crear el directorio bin."
+    handle_error "Crear directorio bin en .config" "Error al crear el directorio bin en .config."
 fi
 sudo -u "$SUDO_USER" cp "$user_home/Entorno-Linux/bin/"* "$user_home/.config/bin/" > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Copiar y dar permisos a scripts personalizados" "Error al copiar scripts personalizados."
+    handle_error "Copiar y dar permisos a scripts personalizados" "Error al copiar scripts personalizados. Asegúrate de que '$user_home/Entorno-Linux/bin/' exista y tenga contenido."
 fi
 sudo -u "$SUDO_USER" chmod +x \
     "$user_home/.config/bin/ethernet_status.sh" \
     "$user_home/.config/bin/hackthebox_status.sh" \
     "$user_home/.config/bin/target_to_hack.sh" > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Copiar y dar permisos a scripts personalizados" "Error al dar permisos a scripts personalizados."
+    handle_error "Copiar y dar permisos a scripts personalizados" "Error al dar permisos de ejecución a scripts personalizados."
 fi
 mark_task_completed "Crear directorio bin en .config"
 mark_task_completed "Copiar y dar permisos a scripts personalizados"
 
 # Instalar y configurar sudo-plugin
-mkdir -p /usr/share/zsh-sudo-plugin > /dev/null 2>&1
+sudo mkdir -p /usr/share/zsh-sudo-plugin > /dev/null 2>&1
 if [ $? -ne 0 ]; then
     handle_error "Crear directorio zsh-sudo-plugin" "Error al crear directorio zsh-sudo-plugin."
 fi
-chown "$SUDO_USER":"$SUDO_USER" /usr/share/zsh-sudo-plugin > /dev/null 2>&1
+sudo chown "$SUDO_USER":"$SUDO_USER" /usr/share/zsh-sudo-plugin > /dev/null 2>&1
 if [ $? -ne 0 ]; then
     handle_error "Crear directorio zsh-sudo-plugin" "Error al cambiar propietario de zsh-sudo-plugin."
 fi
-cp "$user_home/Entorno-Linux/sudoPlugin/sudo.plugin.zsh" \
+sudo cp "$user_home/Entorno-Linux/sudoPlugin/sudo.plugin.zsh" \
     /usr/share/zsh-sudo-plugin/ > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Copiar y configurar sudo.plugin.zsh" "Error al copiar sudo.plugin.zsh."
+    handle_error "Copiar y configurar sudo.plugin.zsh" "Error al copiar sudo.plugin.zsh. Asegúrate de que '$user_home/Entorno-Linux/sudoPlugin/sudo.plugin.zsh' exista."
 fi
-chmod 755 /usr/share/zsh-sudo-plugin/sudo.plugin.zsh > /dev/null 2>&1
+sudo chmod 755 /usr/share/zsh-sudo-plugin/sudo.plugin.zsh > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Copiar y configurar sudo.plugin.zsh" "Error al dar permisos a sudo.plugin.zsh."
+    handle_error "Copiar y configurar sudo.plugin.zsh" "Error al dar permisos de ejecución a sudo.plugin.zsh."
 fi
 mark_task_completed "Crear directorio zsh-sudo-plugin"
 mark_task_completed "Copiar y configurar sudo.plugin.zsh"
@@ -652,10 +671,10 @@ fi
 mark_task_completed "Instalar i3lock"
 
 # Clonar e instalar i3lock-fancy
-cd "$user_home/Downloads" || handle_error "Clonar e instalar i3lock-fancy" "No se pudo cambiar al directorio Downloads."
+cd "$user_home/Downloads" || handle_error "Clonar e instalar i3lock-fancy" "No se pudo cambiar al directorio Downloads ($user_home/Downloads)."
 sudo -u "$SUDO_USER" git clone https://github.com/meskarune/i3lock-fancy.git > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Clonar e instalar i3lock-fancy" "Error al clonar i3lock-fancy."
+    handle_error "Clonar e instalar i3lock-fancy" "Error al clonar i3lock-fancy. Revisa tu conexión a internet o los permisos."
 fi
 cd i3lock-fancy || handle_error "Clonar e instalar i3lock-fancy" "No se pudo cambiar al directorio de i3lock-fancy."
 sudo make install > /dev/null 2>&1
@@ -672,16 +691,26 @@ fi
 mark_task_completed "Crear enlace simbólico batcat"
 
 # Actualización final del sistema
-sudo apt update > /dev/null 2>&1 && sudo apt upgrade -y > /dev/null 2>&1
+sudo apt update > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Realizar actualización final del sistema" "Error durante la actualización final del sistema."
+    handle_error "Realizar actualización final del sistema" "Error al ejecutar 'apt update' final."
 fi
+
+# Intentar parrot-upgrade, si falla, usar apt upgrade
+if ! parrot-upgrade -y > /dev/null 2>&1; then
+    echo "Advertencia: 'parrot-upgrade' falló o no está disponible en la actualización final. Intentando 'apt upgrade'." >&2
+    if ! sudo apt upgrade -y > /dev/null 2>&1; then
+        handle_error "Realizar actualización final del sistema" "Error durante la actualización final del sistema con 'apt upgrade'."
+    fi
+fi
+sudo apt autoremove -y > /dev/null 2>&1 # Limpia paquetes viejos
 mark_task_completed "Realizar actualización final del sistema"
 
 # Correccion de kitty
+# Este comando descarga y ejecuta un script de instalación de Kitty, lo cual puede ser útil si la instalación de apt fue problemática
 curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "Corregir instalación de Kitty" "Error al ejecutar el script de corrección de Kitty."
+    echo "Advertencia: El script de corrección de Kitty falló. Esto podría no ser un error crítico si Kitty ya funciona." >&2
 fi
 mark_task_completed "Corregir instalación de Kitty"
 
