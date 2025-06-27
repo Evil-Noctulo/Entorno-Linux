@@ -1,14 +1,14 @@
 
-# Entorno de S4vitar en Kali Linux 100% Funcional
+# Entorno de S4vitar en Linux 100% Funcional
 
 ![image](https://github.com/user-attachments/assets/aefbc484-a87c-4fc2-906a-b7e77bccc18e)
 
-Bienvenidos a la guía de personalización del entorno de S4vitar en Kali Linux. Aquí encontrarás todos los pasos necesarios para una instalación completa y funcional.
+Bienvenidos a la guía de personalización del entorno de S4vitar en Linux. Aquí encontrarás todos los pasos necesarios para una instalación completa y funcional.
 
 ## Video Tutorial
 
 Puedes seguir el video tutorial paso a paso en mi [canal de YouTube](https://www.youtube.com/@CristianSinH-Ciber). Si el contenido es de tu agrado, considera suscribirte y seguirme en [LinkedIn](https://www.linkedin.com/in/cristian-hsilva).
-Recuerda que este script esta diseñado para un sistema operavito Kali Linux en Ingles, si lo quieres en español, cambia en el install.sh Downloads por Descargas. 
+Recuerda que este script esta diseñado para un sistema operativo Linux en Ingles, si lo quieres en español, cambia en el install.sh Downloads por Descargas. 
 
 ## Instalación
 
