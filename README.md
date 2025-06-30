@@ -36,6 +36,7 @@ sudo ./install.sh
 Después de la instalación, asegúrate de seleccionar BSPWM
  ![bspwm](images/bspwm.png)
 
+### Seguir los siguientes pasos para el correcto funcionamiento del entorno
 ### Instalación de NVChad y problema con nvim
 
 puede que al usar nvim tengamos este error
@@ -141,6 +142,7 @@ automatizar este proceso modificando el bspwmrc agregando la siguiente linea al 
 
 y agregar estas 3 líneas
 ![zsh](images/zsh.png)
+
 Comentamos todo el bloque
 
 ![zsh](images/zsh2.png)
