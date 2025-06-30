@@ -130,7 +130,7 @@ exit
 ```
 Otro problema ee que la pantalla se nos vea asi, y para solucionarlo apreta 
 
-[pantalla](images/problemapantalla.png)
+![pantalla](images/problemapantalla.png)
 
 ## Configurar zsh
 
