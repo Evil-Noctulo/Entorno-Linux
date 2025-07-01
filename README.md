@@ -1,5 +1,5 @@
 
-# Entorno de S4vitar en Linux 100% Funcional
+# Entorno de S4vitar en Linux
 
 ![image](images/entorno.png)
 👋 Bienvenido
