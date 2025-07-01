@@ -26,6 +26,7 @@ Si te resulta útil el contenido, no olvides suscribirte y seguirme en [LinkedIn
 Clona el repositorio y prepara la instalación con los siguientes comandos:
 
 ```bash
+# Debes estar situado en /home
 git clone https://github.com/Evil-Noctulo/Entorno-Linux
 cd Entorno-Linux
 chmod +x install.sh
