@@ -131,8 +131,6 @@ exit
 ```
 Otro problema ee que la pantalla se nos vea asi, y para solucionarlo apreta: 
 `win + shift + r` 
-automatizar este proceso modificando el bspwmrc agregando la siguiente linea al final del archivo:
-`win + shift + r`
 
 ![pantalla](images/problemapantalla.png)
 
