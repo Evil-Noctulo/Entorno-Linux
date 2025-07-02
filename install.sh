@@ -153,12 +153,6 @@ mark_task_completed "Mostrar aviso inicial" # Marca la tarea de aviso como compl
 
 # Actualizar el sistema
 log_action="Actualizar el sistema"
-sudo apt update > /dev/null 2>&1
-if [ $? -ne 0 ]; then
-    handle_error "$log_action" "Error al ejecutar 'apt update'."
-fi
-
-# Intentar parrot-upgrade, si falla, usar apt upgrade
 if ! parrot-upgrade -y > /dev/null 2>&1; then
     echo "Advertencia: 'parrot-upgrade' falló o no está disponible. Intentando 'apt upgrade'." >&2
     if ! sudo apt upgrade -y > /dev/null 2>&1; then
