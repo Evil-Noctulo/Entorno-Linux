@@ -65,8 +65,7 @@ declare -a ALL_TASKS=(
     "Clonar e instalar i3lock-fancy"
     "Crear enlace simbólico batcat"
     "Realizar actualización final del sistema"
-    "Corregir instalación de Kitty"
-    "Reiniciar sesión de usuario"
+    "Reiniciar sesión de usuario" # Se mantuvo para el mensaje final
 )
 
 # Array para guardar las tareas completadas
@@ -325,9 +324,7 @@ if [ $? -ne 0 ]; then
 fi
 cd polybar && sudo -u "$SUDO_USER" mkdir build && cd build || handle_error "$log_action" "No se pudo preparar el directorio de Polybar."
 
-# IMPORTANTE: Aquí la salida de cmake NO se redirige para ver errores específicos.
-# Si la instalación es exitosa, puedes añadir "> /dev/null 2>&1" al final de la línea.
-sudo -u "$SUDO_USER" cmake ..
+sudo -u "$SUDO_USER" cmake .. > /dev/null 2>&1 # Redirigida la salida de cmake
 if [ $? -ne 0 ]; then
     handle_error "$log_action" "Error al ejecutar cmake para Polybar. Revisa la salida de cmake para dependencias faltantes."
 fi
@@ -376,8 +373,7 @@ cd picom && sudo -u "$SUDO_USER" git submodule update --init --recursive > /dev/
 if [ $? -ne 0 ]; then
     handle_error "$log_action" "Error al actualizar submódulos de Picom. Revisa la conexión."
 fi
-# IMPORTANTE: Aquí la salida de meson NO se redirige para ver errores específicos.
-sudo -u "$SUDO_USER" meson --buildtype=release . build
+sudo -u "$SUDO_USER" meson --buildtype=release . build > /dev/null 2>&1 # Redirigida la salida de meson
 if [ $? -ne 0 ]; then
     handle_error "$log_action" "Error al configurar meson para Picom. Revisa la salida para dependencias faltantes."
 fi
@@ -702,12 +698,6 @@ sudo mkdir -p /usr/share/zsh-sudo-plugin > /dev/null 2>&1
 if [ $? -ne 0 ]; then
     handle_error "$log_action" "Error al crear directorio zsh-sudo-plugin."
 fi
-# La línea de chown a "$SUDO_USER" no debería ser necesaria para /usr/share/, root es el propietario.
-# Si se hizo, podría causar problemas de permisos. Lo quito por seguridad.
-# sudo chown "$SUDO_USER":"$SUDO_USER" /usr/share/zsh-sudo-plugin > /dev/null 2>&1
-# if [ $? -ne 0 ]; then
-#       handle_error "$log_action" "Error al cambiar propietario de zsh-sudo-plugin."
-# fi
 mark_task_completed "$log_action"
 
 log_action="Copiar y configurar sudo.plugin.zsh"
@@ -785,26 +775,18 @@ fi
 sudo apt autoremove -y > /dev/null 2>&1 # Limpia paquetes viejos
 mark_task_completed "$log_action"
 
-# Correccion de kitty (Este comando descarga y ejecuta un script de instalación de Kitty, lo cual puede ser útil si la instalación de apt fue problemática)
-log_action="Corregir instalación de Kitty"
-curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh > /dev/null 2>&1
-if [ $? -ne 0 ]; then
-    handle_error "$log_action" "Error al corregir la instalación de Kitty."
-fi
-mark_task_completed "$log_action"
-
-# Reiniciar sesión de usuario
-log_action="Reiniciar sesión de usuario"
+# Mensaje final de entorno listo
+log_action="Reiniciar sesión de usuario" # Aunque no lo reinicia, se usa como tarea final
 clear_screen
 echo "======================================================"
-echo "          INSTALACIÓN COMPLETADA EXITOSAMENTE         "
+echo "          ¡EL ENTORNO ESTÁ LISTO!                     "
 echo "======================================================"
 echo ""
-echo "¡Felicidades! La instalación del entorno ha finalizado."
-echo "Para que los cambios surtan efecto completamente, se recomienda"
-echo "reiniciar la sesión del usuario actual o el sistema."
+echo "¡Felicidades! La instalación y configuración de tu entorno han finalizado exitosamente."
+echo "Para que todos los cambios surtan efecto por completo, te recomendamos encarecidamente"
+echo "que **reinicies tu sesión actual** o **reinicies el sistema**."
 echo ""
-echo "Puedes cerrar esta terminal y reiniciar tu sesión."
+echo "¡Disfruta de tu nuevo entorno!"
 echo ""
 mark_task_completed "$log_action"
 
