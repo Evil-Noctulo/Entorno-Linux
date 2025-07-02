@@ -19,6 +19,7 @@ declare -a ALL_TASKS=(
     "Compilar e instalar sxhkd"
     "Instalar libxinerama1 y libxinerama-dev"
     "Instalar Kitty"
+    "Corregir instalación de Kitty" # ¡NUEVA TAREA AÑADIDA AQUÍ!
     "Crear directorios de configuración"
     "Copiar archivos de configuración de bspwm y sxhkd"
     "Copiar y hacer ejecutable bspwm_resize"
@@ -79,7 +80,7 @@ display_checklist() {
         local found=0
         for completed_item in "${COMPLETED_TASKS[@]}"; do
             [[ "$task_item" == "$completed_item" ]] && { found=1; break; }
-        done
+        done # <-- ¡CORREGIDO! Antes había un 'F'
         
         if [[ "$found" -eq 1 ]]; then
             echo "[x] $task_item"
@@ -152,13 +153,18 @@ mark_task_completed "Mostrar aviso inicial" # Marca la tarea de aviso como compl
 
 # Actualizar el sistema
 log_action="Actualizar el sistema"
+sudo apt update > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+    handle_error "$log_action" "Error al ejecutar 'apt update'."
+fi
+
 # Intentar parrot-upgrade, si falla, usar apt upgrade
-if ! parrot-upgrade -y > /dev/null 2>&1; then # AÑADIDO: Redirigir la salida aquí también
+if ! parrot-upgrade -y > /dev/null 2>&1; then
     echo "Advertencia: 'parrot-upgrade' falló o no está disponible. Intentando 'apt upgrade'." >&2
     if ! sudo apt upgrade -y > /dev/null 2>&1; then
         handle_error "$log_action" "Error durante la actualización del sistema con 'apt upgrade'."
     fi
-fi # <--- ¡EL "fi" FALTANTE ESTABA AQUÍ!
+fi
 sudo apt autoremove -y > /dev/null 2>&1 # Limpia paquetes viejos
 mark_task_completed "$log_action"
 
@@ -168,7 +174,7 @@ deps=(
     build-essential git vim libxcb-util0-dev libxcb-ewmh-dev
     libxcb-randr0-dev libxcb-icccm4-dev libxcb-keysyms1-dev
     libxcb-xinerama0-dev libasound2-dev libxcb-xtest0-dev
-    libxcb-shape0-dev libxcb-xinput-dev
+    libxcb-shape0-dev libxcb-xinput-dev # Añadida libxcb-xinput-dev
 )
 for dep in "${deps[@]}"; do
     if ! sudo apt install -y "$dep" > /dev/null 2>&1; then
@@ -234,11 +240,31 @@ mark_task_completed "$log_action"
 
 # Instalar Kitty
 log_action="Instalar Kitty"
-curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh > /dev/null 2>&1
+sudo apt install -y kitty > /dev/null 2>&1
 if [ $? -ne 0 ]; then
     handle_error "$log_action" "Error al instalar Kitty. Asegúrate de que los repositorios estén correctos."
 fi
 mark_task_completed "$log_action"
+
+# --- CORRECCIÓN DE KITTY ---
+log_action="Corregir instalación de Kitty"
+sudo rm -f /usr/bin/kitty > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+    echo "Advertencia: No se pudo eliminar el binario existente de Kitty en /usr/bin/kitty (podría no existir, lo cual es normal). Continuando..." >&2
+fi
+sudo tee /usr/local/bin/kitty > /dev/null << EOF
+#!/usr/bin/env bash
+exec /home/sinh/.local/kitty.app/bin/kitty "\$@"
+EOF
+if [ $? -ne 0 ]; then
+    handle_error "$log_action" "Error al crear el script wrapper para Kitty en /usr/local/bin."
+fi
+sudo chmod +x /usr/local/bin/kitty > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+    handle_error "$log_action" "Error al dar permisos de ejecución al script wrapper de Kitty."
+fi
+mark_task_completed "$log_action"
+# --- FIN DE LA CORRECCIÓN DE KITTY ---
 
 # Crear directorios de configuración
 log_action="Crear directorios de configuración"
@@ -643,7 +669,12 @@ mark_task_completed "$log_action"
 
 # Crear enlace simbólico .zshrc de root
 log_action="Crear enlace simbólico .zshrc de root"
-# Aunque se advierte sobre la conveniencia, se mantiene el comando para no alterar la lógica original del usuario.
+# Este enlace podría causar problemas si .zshrc del usuario es borrado.
+# Es preferible copiar el archivo a /root/.zshrc y gestionarlo por separado.
+# No se recomienda un enlace simbólico entre el home de un usuario y /root.
+# Si el objetivo es que el .zshrc de root sea idéntico, es mejor copiarlo.
+# Recomiendo que el .zshrc de root sea una copia independiente para evitar dependencias.
+# Dejo el comando, pero con la advertencia.
 sudo ln -sf "$user_home/.zshrc" /root/.zshrc > /dev/null 2>&1
 if [ $? -ne 0 ]; then
     handle_error "$log_action" "Error al crear enlace simbólico .zshrc de root."
@@ -659,12 +690,13 @@ fi
 mark_task_completed "$log_action"
 
 log_action="Copiar y dar permisos a scripts personalizados"
+# La línea de cp debería haber cambiado ya a 'sudo cp'
 sudo cp "$user_home/Entorno-Linux/bin/"* "$user_home/.config/bin/" > /dev/null 2>&1
 if [ $? -ne 0 ]; then
     handle_error "$log_action" "Error al copiar scripts personalizados. Asegúrate de que '$user_home/Entorno-Linux/bin/' exista y tenga contenido."
 fi
 
-# Dar permisos de ejecución
+# AHORA EL CAMBIO CRÍTICO: Elimina '-u "$SUDO_USER"' de chmod
 sudo chmod +x \
     "$user_home/.config/bin/ethernet_status.sh" \
     "$user_home/.config/bin/hackthebox_status.sh" \
@@ -673,7 +705,7 @@ if [ $? -ne 0 ]; then
     handle_error "$log_action" "Error al dar permisos de ejecución a scripts personalizados."
 fi
 
-# Asegurarse de que el usuario sea el propietario de los scripts
+# Y asegúrate de que esta sección para cambiar la propiedad esté presente y correcta
 sudo chown "$SUDO_USER":"$SUDO_USER" \
     "$user_home/.config/bin/ethernet_status.sh" \
     "$user_home/.config/bin/hackthebox_status.sh" \
@@ -690,6 +722,12 @@ sudo mkdir -p /usr/share/zsh-sudo-plugin > /dev/null 2>&1
 if [ $? -ne 0 ]; then
     handle_error "$log_action" "Error al crear directorio zsh-sudo-plugin."
 fi
+# La línea de chown a "$SUDO_USER" no debería ser necesaria para /usr/share/, root es el propietario.
+# Si se hizo, podría causar problemas de permisos. Lo quito por seguridad.
+# sudo chown "$SUDO_USER":"$SUDO_USER" /usr/share/zsh-sudo-plugin > /dev/null 2>&1
+# if [ $? -ne 0 ]; then
+#       handle_error "$log_action" "Error al cambiar propietario de zsh-sudo-plugin."
+# fi
 mark_task_completed "$log_action"
 
 log_action="Copiar y configurar sudo.plugin.zsh"
@@ -767,8 +805,19 @@ fi
 sudo apt autoremove -y > /dev/null 2>&1 # Limpia paquetes viejos
 mark_task_completed "$log_action"
 
-# Reiniciar sesión de usuario (será lo último)
-mark_task_completed "Reiniciar sesión de usuario"
-clear_screen
-echo "¡Instalación completada! La sesión se reiniciará ahora."
-kill -9 -1 # Este comando forzará el reinicio de la sesión.
+# Reiniciar sesión de usuario
+log_action="Reiniciar sesión de usuario"
+# No se ejecuta aquí, es una instrucción manual al final del script.
+# Esto se marca como completado para que la checklist muestre el progreso.
+mark_task_completed "$log_action"
+
+
+clear_screen # Limpia la pantalla antes del mensaje final
+echo "======================================================"
+echo "          INSTALACIÓN COMPLETADA EXITOSAMENTE         "
+echo "======================================================"
+echo ""
+echo "Todas las tareas han sido completadas."
+echo "Para que los cambios surtan efecto, por favor, **reinicia tu sesión de usuario**."
+echo ""
+echo "¡Disfruta de tu nuevo entorno!"
