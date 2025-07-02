@@ -7,9 +7,9 @@ Esta es una guía de personalización del entorno de S4vitar en Linux, adaptada 
 
 🛠️ Este script se basa en el trabajo original del usuario [Balthael](https://github.com/Balthael), pero ha sido modificado para:
 
-- Automatizar completamente la instalación del entorno.
-- Corregir errores y problemas que presenta el script original en sistemas como Parrot OS.
-- Optimizar el proceso para dejar todo listo con una sola ejecución.
+- Automatización completa del proceso de instalación del entorno.
+- Resolución de errores y problemas identificados en el script original, especialmente en distribuciones como Parrot OS.
+- Optimización integral para una configuración rápida, sencilla y efectiva en una sola ejecución.
 
 Aquí encontrarás todos los pasos necesarios para dejar tu sistema al estilo S4vitar, incluyendo atajos, herramientas visuales y configuraciones listas para usar.
  
