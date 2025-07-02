@@ -40,15 +40,6 @@ Después de la instalación, asegúrate de seleccionar BSPWM
 ### Seguir los siguientes pasos para el correcto funcionamiento del entorno
 ### Instalación de NVChad y problema con nvim
 
-puede que al usar nvim tengamos este error
-
-```jsx
-Error detected while processing /home/noctulo/.config/nvim/init.lua:
-E5113: Error while calling lua chunk: /home/noctulo/.config/nvim/init.lua:7: attempt to index field 'uv' (a nil value)
-stack traceback:
-/home/noctulo/.config/nvim/init.lua:7: in main chunk
-```
-
 **Correción de Nvim**
 
 actualizar kitty nuevamente pero ahora de forma manual.
