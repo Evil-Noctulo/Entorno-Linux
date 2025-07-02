@@ -80,7 +80,7 @@ display_checklist() {
         local found=0
         for completed_item in "${COMPLETED_TASKS[@]}"; do
             [[ "$task_item" == "$completed_item" ]] && { found=1; break; }
-        done # <-- ¡CORREGIDO! Antes había un 'F'
+        done
         
         if [[ "$found" -eq 1 ]]; then
             echo "[x] $task_item"
@@ -706,7 +706,7 @@ fi
 # Si se hizo, podría causar problemas de permisos. Lo quito por seguridad.
 # sudo chown "$SUDO_USER":"$SUDO_USER" /usr/share/zsh-sudo-plugin > /dev/null 2>&1
 # if [ $? -ne 0 ]; then
-#     handle_error "$log_action" "Error al cambiar propietario de zsh-sudo-plugin."
+#       handle_error "$log_action" "Error al cambiar propietario de zsh-sudo-plugin."
 # fi
 mark_task_completed "$log_action"
 
@@ -789,12 +789,23 @@ mark_task_completed "$log_action"
 log_action="Corregir instalación de Kitty"
 curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    echo "Advertencia: El script de corrección de Kitty falló. Esto podría no ser un error crítico si Kitty ya funciona." >&2
+    handle_error "$log_action" "Error al corregir la instalación de Kitty."
 fi
 mark_task_completed "$log_action"
 
-# Reiniciar sesión de usuario (será lo último)
-mark_task_completed "Reiniciar sesión de usuario"
+# Reiniciar sesión de usuario
+log_action="Reiniciar sesión de usuario"
 clear_screen
-echo "¡Instalación completada! La sesión se reiniciará ahora."
-kill -9 -1 # Este comando forzará el reinicio de la sesión.
+echo "======================================================"
+echo "          INSTALACIÓN COMPLETADA EXITOSAMENTE         "
+echo "======================================================"
+echo ""
+echo "¡Felicidades! La instalación del entorno ha finalizado."
+echo "Para que los cambios surtan efecto completamente, se recomienda"
+echo "reiniciar la sesión del usuario actual o el sistema."
+echo ""
+echo "Puedes cerrar esta terminal y reiniciar tu sesión."
+echo ""
+mark_task_completed "$log_action"
+
+exit 0
