@@ -152,7 +152,7 @@ mark_task_completed "Mostrar aviso inicial" # Marca la tarea de aviso como compl
 
 # Actualizar el sistema
 # Intentar parrot-upgrade, si falla, usar apt upgrade
-if ! parrot-upgrade -y > /dev/null 2>&1; then
+if ! parrot-upgrade -y then
     echo "Advertencia: 'parrot-upgrade' falló o no está disponible en la actualización final. Intentando 'apt upgrade'." >&2
     if ! sudo apt upgrade -y > /dev/null 2>&1; then
         handle_error "$log_action" "Error durante la actualización final del sistema con 'apt upgrade'."
