@@ -79,7 +79,7 @@ display_checklist() {
         local found=0
         for completed_item in "${COMPLETED_TASKS[@]}"; do
             [[ "$task_item" == "$completed_item" ]] && { found=1; break; }
-        done # <-- ¡CORREGIDO! Antes había un 'F'
+        done
         
         if [[ "$found" -eq 1 ]]; then
             echo "[x] $task_item"
@@ -151,12 +151,14 @@ read -r # Espera a que el usuario presione Enter
 mark_task_completed "Mostrar aviso inicial" # Marca la tarea de aviso como completada
 
 # Actualizar el sistema
+log_action="Actualizar el sistema"
 # Intentar parrot-upgrade, si falla, usar apt upgrade
-if ! parrot-upgrade -y then
-    echo "Advertencia: 'parrot-upgrade' falló o no está disponible en la actualización final. Intentando 'apt upgrade'." >&2
+if ! parrot-upgrade -y > /dev/null 2>&1; then # AÑADIDO: Redirigir la salida aquí también
+    echo "Advertencia: 'parrot-upgrade' falló o no está disponible. Intentando 'apt upgrade'." >&2
     if ! sudo apt upgrade -y > /dev/null 2>&1; then
-        handle_error "$log_action" "Error durante la actualización final del sistema con 'apt upgrade'."
-fi
+        handle_error "$log_action" "Error durante la actualización del sistema con 'apt upgrade'."
+    fi
+fi # <--- ¡EL "fi" FALTANTE ESTABA AQUÍ!
 sudo apt autoremove -y > /dev/null 2>&1 # Limpia paquetes viejos
 mark_task_completed "$log_action"
 
@@ -166,7 +168,7 @@ deps=(
     build-essential git vim libxcb-util0-dev libxcb-ewmh-dev
     libxcb-randr0-dev libxcb-icccm4-dev libxcb-keysyms1-dev
     libxcb-xinerama0-dev libasound2-dev libxcb-xtest0-dev
-    libxcb-shape0-dev libxcb-xinput-dev # Añadida libxcb-xinput-dev
+    libxcb-shape0-dev libxcb-xinput-dev
 )
 for dep in "${deps[@]}"; do
     if ! sudo apt install -y "$dep" > /dev/null 2>&1; then
@@ -641,12 +643,7 @@ mark_task_completed "$log_action"
 
 # Crear enlace simbólico .zshrc de root
 log_action="Crear enlace simbólico .zshrc de root"
-# Este enlace podría causar problemas si .zshrc del usuario es borrado.
-# Es preferible copiar el archivo a /root/.zshrc y gestionarlo por separado.
-# No se recomienda un enlace simbólico entre el home de un usuario y /root.
-# Si el objetivo es que el .zshrc de root sea idéntico, es mejor copiarlo.
-# Recomiendo que el .zshrc de root sea una copia independiente para evitar dependencias.
-# Dejo el comando, pero con la advertencia.
+# Aunque se advierte sobre la conveniencia, se mantiene el comando para no alterar la lógica original del usuario.
 sudo ln -sf "$user_home/.zshrc" /root/.zshrc > /dev/null 2>&1
 if [ $? -ne 0 ]; then
     handle_error "$log_action" "Error al crear enlace simbólico .zshrc de root."
@@ -662,13 +659,12 @@ fi
 mark_task_completed "$log_action"
 
 log_action="Copiar y dar permisos a scripts personalizados"
-# La línea de cp debería haber cambiado ya a 'sudo cp'
 sudo cp "$user_home/Entorno-Linux/bin/"* "$user_home/.config/bin/" > /dev/null 2>&1
 if [ $? -ne 0 ]; then
     handle_error "$log_action" "Error al copiar scripts personalizados. Asegúrate de que '$user_home/Entorno-Linux/bin/' exista y tenga contenido."
 fi
 
-# AHORA EL CAMBIO CRÍTICO: Elimina '-u "$SUDO_USER"' de chmod
+# Dar permisos de ejecución
 sudo chmod +x \
     "$user_home/.config/bin/ethernet_status.sh" \
     "$user_home/.config/bin/hackthebox_status.sh" \
@@ -677,7 +673,7 @@ if [ $? -ne 0 ]; then
     handle_error "$log_action" "Error al dar permisos de ejecución a scripts personalizados."
 fi
 
-# Y asegúrate de que esta sección para cambiar la propiedad esté presente y correcta
+# Asegurarse de que el usuario sea el propietario de los scripts
 sudo chown "$SUDO_USER":"$SUDO_USER" \
     "$user_home/.config/bin/ethernet_status.sh" \
     "$user_home/.config/bin/hackthebox_status.sh" \
@@ -694,12 +690,6 @@ sudo mkdir -p /usr/share/zsh-sudo-plugin > /dev/null 2>&1
 if [ $? -ne 0 ]; then
     handle_error "$log_action" "Error al crear directorio zsh-sudo-plugin."
 fi
-# La línea de chown a "$SUDO_USER" no debería ser necesaria para /usr/share/, root es el propietario.
-# Si se hizo, podría causar problemas de permisos. Lo quito por seguridad.
-# sudo chown "$SUDO_USER":"$SUDO_USER" /usr/share/zsh-sudo-plugin > /dev/null 2>&1
-# if [ $? -ne 0 ]; then
-#     handle_error "$log_action" "Error al cambiar propietario de zsh-sudo-plugin."
-# fi
 mark_task_completed "$log_action"
 
 log_action="Copiar y configurar sudo.plugin.zsh"
