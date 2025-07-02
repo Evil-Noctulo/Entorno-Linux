@@ -156,7 +156,6 @@ if ! parrot-upgrade -y then
     echo "Advertencia: 'parrot-upgrade' falló o no está disponible en la actualización final. Intentando 'apt upgrade'." >&2
     if ! sudo apt upgrade -y > /dev/null 2>&1; then
         handle_error "$log_action" "Error durante la actualización final del sistema con 'apt upgrade'."
-    fi
 fi
 sudo apt autoremove -y > /dev/null 2>&1 # Limpia paquetes viejos
 mark_task_completed "$log_action"
