@@ -152,11 +152,11 @@ read -r # Espera a que el usuario presione Enter
 mark_task_completed "Mostrar aviso inicial" # Marca la tarea de aviso como completada
 
 # Actualizar el sistema
-log_action="Actualizar el sistema"
+# Intentar parrot-upgrade, si falla, usar apt upgrade
 if ! parrot-upgrade -y > /dev/null 2>&1; then
-    echo "Advertencia: 'parrot-upgrade' falló o no está disponible. Intentando 'apt upgrade'." >&2
+    echo "Advertencia: 'parrot-upgrade' falló o no está disponible en la actualización final. Intentando 'apt upgrade'." >&2
     if ! sudo apt upgrade -y > /dev/null 2>&1; then
-        handle_error "$log_action" "Error durante la actualización del sistema con 'apt upgrade'."
+        handle_error "$log_action" "Error durante la actualización final del sistema con 'apt upgrade'."
     fi
 fi
 sudo apt autoremove -y > /dev/null 2>&1 # Limpia paquetes viejos
@@ -234,7 +234,7 @@ mark_task_completed "$log_action"
 
 # Instalar Kitty
 log_action="Instalar Kitty"
-sudo apt install -y kitty > /dev/null 2>&1
+curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh > /dev/null 2>&1
 if [ $? -ne 0 ]; then
     handle_error "$log_action" "Error al instalar Kitty. Asegúrate de que los repositorios estén correctos."
 fi
@@ -777,14 +777,6 @@ if ! parrot-upgrade -y > /dev/null 2>&1; then
     fi
 fi
 sudo apt autoremove -y > /dev/null 2>&1 # Limpia paquetes viejos
-mark_task_completed "$log_action"
-
-# Correccion de kitty (Este comando descarga y ejecuta un script de instalación de Kitty, lo cual puede ser útil si la instalación de apt fue problemática)
-log_action="Corregir instalación de Kitty"
-curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh > /dev/null 2>&1
-if [ $? -ne 0 ]; then
-    echo "Advertencia: El script de corrección de Kitty falló. Esto podría no ser un error crítico si Kitty ya funciona." >&2
-fi
 mark_task_completed "$log_action"
 
 # Reiniciar sesión de usuario (será lo último)
