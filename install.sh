@@ -153,18 +153,13 @@ mark_task_completed "Mostrar aviso inicial" # Marca la tarea de aviso como compl
 
 # Actualizar el sistema
 log_action="Actualizar el sistema"
-sudo apt update > /dev/null 2>&1
-if [ $? -ne 0 ]; then
-    handle_error "$log_action" "Error al ejecutar 'apt update'."
-fi
-
 # Intentar parrot-upgrade, si falla, usar apt upgrade
-if ! parrot-upgrade -y > /dev/null 2>&1; then
+if ! parrot-upgrade -y > /dev/null 2>&1; then # AÑADIDO: Redirigir la salida aquí también
     echo "Advertencia: 'parrot-upgrade' falló o no está disponible. Intentando 'apt upgrade'." >&2
     if ! sudo apt upgrade -y > /dev/null 2>&1; then
         handle_error "$log_action" "Error durante la actualización del sistema con 'apt upgrade'."
     fi
-fi
+fi 
 sudo apt autoremove -y > /dev/null 2>&1 # Limpia paquetes viejos
 mark_task_completed "$log_action"
 
@@ -330,7 +325,7 @@ sudo apt install -y \
     libxcb-xkb-dev libxcb-xrm-dev \
     libxcb-cursor-dev libasound2-dev libpulse-dev \
     libjsoncpp-dev libmpdclient-dev libuv1-dev libnl-genl-3-dev \
-    libxcb-xinput-dev # Asegurada esta dependencia aquí también
+    libxcb-xinput-dev 
 if [ $? -ne 0 ]; then
     handle_error "$log_action" "Error al instalar algunas dependencias de Polybar. Revisa la conexión o los repositorios."
 fi
@@ -346,7 +341,7 @@ fi
 cd polybar && sudo -u "$SUDO_USER" mkdir build && cd build || handle_error "$log_action" "No se pudo preparar el directorio de Polybar."
 
 # IMPORTANTE: Aquí la salida de cmake NO se redirige para ver errores específicos.
-# Si la instalación es exitosa, puedes añadir "> /dev/null 2>&1" al final de la línea.
+
 sudo -u "$SUDO_USER" cmake ..
 if [ $? -ne 0 ]; then
     handle_error "$log_action" "Error al ejecutar cmake para Polybar. Revisa la salida de cmake para dependencias faltantes."
