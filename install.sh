@@ -19,7 +19,6 @@ declare -a ALL_TASKS=(
     "Compilar e instalar sxhkd"
     "Instalar libxinerama1 y libxinerama-dev"
     "Instalar Kitty"
-    "Corregir instalación de Kitty" # ¡NUEVA TAREA AÑADIDA AQUÍ!
     "Crear directorios de configuración"
     "Copiar archivos de configuración de bspwm y sxhkd"
     "Copiar y hacer ejecutable bspwm_resize"
@@ -66,6 +65,7 @@ declare -a ALL_TASKS=(
     "Clonar e instalar i3lock-fancy"
     "Crear enlace simbólico batcat"
     "Realizar actualización final del sistema"
+    "Corregir instalación de Kitty"
     "Reiniciar sesión de usuario"
 )
 
@@ -153,13 +153,18 @@ mark_task_completed "Mostrar aviso inicial" # Marca la tarea de aviso como compl
 
 # Actualizar el sistema
 log_action="Actualizar el sistema"
+sudo apt update > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+    handle_error "$log_action" "Error al ejecutar 'apt update'."
+fi
+
 # Intentar parrot-upgrade, si falla, usar apt upgrade
-if ! parrot-upgrade -y > /dev/null 2>&1; then # AÑADIDO: Redirigir la salida aquí también
+if ! parrot-upgrade -y > /dev/null 2>&1; then
     echo "Advertencia: 'parrot-upgrade' falló o no está disponible. Intentando 'apt upgrade'." >&2
     if ! sudo apt upgrade -y > /dev/null 2>&1; then
         handle_error "$log_action" "Error durante la actualización del sistema con 'apt upgrade'."
     fi
-fi 
+fi
 sudo apt autoremove -y > /dev/null 2>&1 # Limpia paquetes viejos
 mark_task_completed "$log_action"
 
@@ -241,26 +246,6 @@ if [ $? -ne 0 ]; then
 fi
 mark_task_completed "$log_action"
 
-# --- CORRECCIÓN DE KITTY ---
-log_action="Corregir instalación de Kitty"
-sudo rm -f /usr/bin/kitty > /dev/null 2>&1
-if [ $? -ne 0 ]; then
-    echo "Advertencia: No se pudo eliminar el binario existente de Kitty en /usr/bin/kitty (podría no existir, lo cual es normal). Continuando..." >&2
-fi
-sudo tee /usr/local/bin/kitty > /dev/null << EOF
-#!/usr/bin/env bash
-exec /home/sinh/.local/kitty.app/bin/kitty "\$@"
-EOF
-if [ $? -ne 0 ]; then
-    handle_error "$log_action" "Error al crear el script wrapper para Kitty en /usr/local/bin."
-fi
-sudo chmod +x /usr/local/bin/kitty > /dev/null 2>&1
-if [ $? -ne 0 ]; then
-    handle_error "$log_action" "Error al dar permisos de ejecución al script wrapper de Kitty."
-fi
-mark_task_completed "$log_action"
-# --- FIN DE LA CORRECCIÓN DE KITTY ---
-
 # Crear directorios de configuración
 log_action="Crear directorios de configuración"
 sudo -u "$SUDO_USER" mkdir -p \
@@ -325,7 +310,7 @@ sudo apt install -y \
     libxcb-xkb-dev libxcb-xrm-dev \
     libxcb-cursor-dev libasound2-dev libpulse-dev \
     libjsoncpp-dev libmpdclient-dev libuv1-dev libnl-genl-3-dev \
-    libxcb-xinput-dev 
+    libxcb-xinput-dev # Asegurada esta dependencia aquí también
 if [ $? -ne 0 ]; then
     handle_error "$log_action" "Error al instalar algunas dependencias de Polybar. Revisa la conexión o los repositorios."
 fi
@@ -341,7 +326,7 @@ fi
 cd polybar && sudo -u "$SUDO_USER" mkdir build && cd build || handle_error "$log_action" "No se pudo preparar el directorio de Polybar."
 
 # IMPORTANTE: Aquí la salida de cmake NO se redirige para ver errores específicos.
-
+# Si la instalación es exitosa, puedes añadir "> /dev/null 2>&1" al final de la línea.
 sudo -u "$SUDO_USER" cmake ..
 if [ $? -ne 0 ]; then
     handle_error "$log_action" "Error al ejecutar cmake para Polybar. Revisa la salida de cmake para dependencias faltantes."
@@ -721,7 +706,7 @@ fi
 # Si se hizo, podría causar problemas de permisos. Lo quito por seguridad.
 # sudo chown "$SUDO_USER":"$SUDO_USER" /usr/share/zsh-sudo-plugin > /dev/null 2>&1
 # if [ $? -ne 0 ]; then
-#       handle_error "$log_action" "Error al cambiar propietario de zsh-sudo-plugin."
+#     handle_error "$log_action" "Error al cambiar propietario de zsh-sudo-plugin."
 # fi
 mark_task_completed "$log_action"
 
@@ -800,19 +785,16 @@ fi
 sudo apt autoremove -y > /dev/null 2>&1 # Limpia paquetes viejos
 mark_task_completed "$log_action"
 
-# Reiniciar sesión de usuario
-log_action="Reiniciar sesión de usuario"
-# No se ejecuta aquí, es una instrucción manual al final del script.
-# Esto se marca como completado para que la checklist muestre el progreso.
+# Correccion de kitty (Este comando descarga y ejecuta un script de instalación de Kitty, lo cual puede ser útil si la instalación de apt fue problemática)
+log_action="Corregir instalación de Kitty"
+curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+    echo "Advertencia: El script de corrección de Kitty falló. Esto podría no ser un error crítico si Kitty ya funciona." >&2
+fi
 mark_task_completed "$log_action"
 
-
-clear_screen # Limpia la pantalla antes del mensaje final
-echo "======================================================"
-echo "          INSTALACIÓN COMPLETADA EXITOSAMENTE         "
-echo "======================================================"
-echo ""
-echo "Todas las tareas han sido completadas."
-echo "Para que los cambios surtan efecto, por favor, **reinicia tu sesión de usuario**."
-echo ""
-echo "¡Disfruta de tu nuevo entorno!"
+# Reiniciar sesión de usuario (será lo último)
+mark_task_completed "Reiniciar sesión de usuario"
+clear_screen
+echo "¡Instalación completada! La sesión se reiniciará ahora."
+kill -9 -1 # Este comando forzará el reinicio de la sesión.
