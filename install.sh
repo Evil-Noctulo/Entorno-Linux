@@ -65,7 +65,6 @@ declare -a ALL_TASKS=(
     "Clonar e instalar i3lock-fancy"
     "Crear enlace simbólico batcat"
     "Realizar actualización final del sistema"
-    "Corregir instalación de Kitty"
     "Reiniciar sesión de usuario"
 )
 
