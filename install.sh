@@ -80,7 +80,7 @@ display_checklist() {
         local found=0
         for completed_item in "${COMPLETED_TASKS[@]}"; do
             [[ "$task_item" == "$completed_item" ]] && { found=1; break; }
-        end
+        done # <-- ¡CORREGIDO!
         
         if [[ "$found" -eq 1 ]]; then
             echo "[x] $task_item"
@@ -236,13 +236,13 @@ mark_task_completed "$log_action"
 
 # Clonar bspwm y sxhkd
 log_action="Clonar bspwm y sxhkd"
-cd "$user_home" || handle_error "$log_action" "No se pudo cambiar al directorio home del usuario: $user_home. Verifica los permisos o si el directorio existe."
+cd "$user_home" || handle_error "$log_action" "No se pudo cambiar al directorio home del usuario: $user_home. Verifica los permisos o si el path del Entorno-Linux es correcto."
 
 # --- Comprobación y Clonación de bspwm ---
 if [ -d "$user_home/bspwm" ]; then
     echo "El directorio $user_home/bspwm ya existe. Saltando clonación de bspwm."
 else
-    echo "Clonando bspwm desde https://github.com/baskerville/bspwm.git en $user_home..."
+    echo "Clonando bspwm desde https://github.com/baskerville/bspwm.git en $user_home... (la salida de git será visible en caso de error)"
     # Ejecuta git clone como el usuario no privilegiado para que los archivos tengan su propiedad.
     if ! sudo -u "$REAL_USER" git clone https://github.com/baskerville/bspwm.git; then
         handle_error "$log_action" "Error al clonar bspwm. Revisa la conexión a Internet o los permisos."
@@ -253,7 +253,7 @@ fi
 if [ -d "$user_home/sxhkd" ]; then
     echo "El directorio $user_home/sxhkd ya existe. Saltando clonación de sxhkd."
 else
-    echo "Clonando sxhkd desde https://github.com/baskerville/sxhkd.git en $user_home..."
+    echo "Clonando sxhkd desde https://github.com/baskerville/sxhkd.git en $user_home... (la salida de git será visible en caso de error)"
     # Ejecuta git clone como el usuario no privilegiado para que los archivos tengan su propiedad.
     if ! sudo -u "$REAL_USER" git clone https://github.com/baskerville/sxhkd.git; then
         handle_error "$log_action" "Error al clonar sxhkd. Revisa la conexión a Internet o los permisos."
@@ -541,6 +541,7 @@ mark_task_completed "$log_action"
 log_action="Clonar repositorio blue-sky"
 echo "Clonando repositorio blue-sky..."
 cd "$user_home/Downloads" || handle_error "$log_action" "No se pudo cambiar al directorio Downloads ($user_home/Downloads)."
+
 if [ -d "blue-sky" ]; then
     echo "El directorio blue-sky ya existe en Downloads. Saltando clonación."
 else
