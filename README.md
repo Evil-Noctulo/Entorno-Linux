@@ -21,7 +21,7 @@ Puedess seguir el video tutorial completo en mi [canal de YouTube](https://www.y
 Si te resulta útil el contenido, no olvides suscribirte y seguirme en [LinkedIn](https://www.linkedin.com/in/cristian-hsilva).
 
 
-## Instalación
+## Instalación (Crea un punto de restauración antes de la instalación)
 
 Clona el repositorio y prepara la instalación con los siguientes comandos:
 
