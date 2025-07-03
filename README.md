@@ -37,8 +37,8 @@ sudo ./install.sh
 Después de la instalación, asegúrate de seleccionar BSPWM
  ![bspwm](images/bspwm.png)
 
-### Seguir los siguientes pasos para el correcto funcionamiento del entorno
-### Instalación de NVChad y problema con nvim
+# Seguir TODOS los siguientes pasos para el correcto funcionamiento del entorno
+### Instalación de NVChad
 
 **Correción de Nvim**
 
