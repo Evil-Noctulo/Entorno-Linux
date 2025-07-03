@@ -15,6 +15,7 @@ Aquí encontrarás todos los pasos necesarios para dejar tu sistema al estilo S4
  
 ## 📜 Descripción
 Este script está diseñado para sistemas operativos Linux en inglés. Si tu sistema está en español, simplemente reemplaza "Downloads" por "Descargas" dentro del archivo install.sh.
+Es importante que leas detenidamente y sigas cada paso para no tener problemas
 
 ## 🎥 Tutorial paso a paso
 Puedess seguir el video tutorial completo en mi [canal de YouTube](https://www.youtube.com/@CristianSinH-Ciber).
@@ -53,6 +54,7 @@ cd # usar estos comandos de forma individual
 git clone https://github.com/NvChad/starter ~/.config/nvim
 mkdir /opt/nvim
 cd /opt/nvim
+#Recuerda cambiar el usuario
 mv /home/USUARIO/Entorno-Linux/neovim/nvim-linux64 .
 cd /opt/nvim/nvim-linux64/bin
 ./nvim
