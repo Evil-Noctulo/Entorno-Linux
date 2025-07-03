@@ -4,70 +4,70 @@
 
 # Limpia la pantalla de la terminal
 clear_screen() {
-    tput reset # Más robusto que 'clear'
+tput reset # Más robusto que 'clear'
 }
 
 # Array de todas las tareas
 declare -a ALL_TASKS=(
-    "Verificar permisos de root"
-    "Verificar conectividad a Internet" # Nueva tarea
-    "Mostrar aviso inicial"
-    "Actualizar el sistema"
-    "Instalar dependencias principales"
-    "Definir directorio home del usuario"
-    "Clonar bspwm y sxhkd"
-    "Compilar e instalar bspwm"
-    "Compilar e instalar sxhkd"
-    "Instalar libxinerama1 y libxinerama-dev"
-    "Instalar Kitty"
-    "Crear directorios de configuración"
-    "Copiar fondos de pantalla"
-    "Copiar archivos de configuración de bspwm y sxhkd"
-    "Copiar y hacer ejecutable bspwm_resize"
-    "Instalar dependencias adicionales para Polybar"
-    "Descargar y instalar Polybar"
-    "Instalar dependencias de Picom"
-    "Instalar libpcre3 y libpcre3-dev"
-    "Descargar y instalar Picom"
-    "Instalar Rofi"
-    "Instalar bspwm desde los repositorios"
-    "Copiar fuentes personalizadas"
-    "Copiar configuración de Kitty"
-    "Instalar Zsh"
-    "Instalar complementos de Zsh"
-    "Copiar configuración de Kitty a root"
-    "Instalar feh"
-    "Instalar ImageMagick"
-    "Instalar Scrub"
-    "Clonar repositorio blue-sky"
-    "Crear directorio de configuración de Polybar"
-    "Copiar archivos de configuración de Polybar"
-    "Copiar fuentes de Polybar"
-    "Actualizar caché de fuentes"
-    "Crear directorio de configuración de Picom"
-    "Copiar archivo de configuración de Picom"
-    "Instalar Fastfetch"
-    "Configurar Powerlevel10k para usuario"
-    "Configurar Powerlevel10k para root"
-    "Copiar .zshrc de usuario"
-    "Ajustar permisos de .zshrc de usuario"
-    "Copiar .zshrc de root"
-    "Copiar archivos de lsd"
-    "Instalar bat y lsd"
-    "Actualizar .p10k.zsh de usuario"
-    "Actualizar .p10k.zsh de root"
-    "Copiar .zshrc de root (seguro)"
-    "Crear directorio bin en .config"
-    "Copiar y dar permisos a scripts personalizados"
-    "Crear directorio zsh-sudo-plugin"
-    "Copiar y configurar sudo.plugin.zsh"
-    "Instalar npm"
-    "Instalar Flameshot"
-    "Instalar i3lock"
-    "Clonar e instalar i3lock-fancy"
-    "Crear enlace simbólico batcat"
-    "Realizar actualización final del sistema"
-    "Finalizar y mostrar mensaje de éxito"
+"Verificar permisos de root"
+"Mostrar aviso inicial"
+"Actualizar el sistema"
+"Instalar dependencias principales"
+"Definir directorio home del usuario"
+"Clonar bspwm y sxhkd"
+"Compilar e instalar bspwm"
+"Compilar e instalar sxhkd"
+"Instalar libxinerama1 y libxinerama-dev"
+"Instalar Kitty"
+    "Corregir instalación de Kitty" # ¡NUEVA TAREA AÑADIDA AQUÍ!
+"Crear directorios de configuración"
+"Copiar archivos de configuración de bspwm y sxhkd"
+"Copiar y hacer ejecutable bspwm_resize"
+"Instalar dependencias adicionales para Polybar"
+"Descargar y instalar Polybar"
+"Instalar dependencias de Picom"
+"Instalar libpcre3 y libpcre3-dev"
+"Descargar y instalar Picom"
+"Instalar Rofi"
+"Instalar bspwm desde los repositorios"
+"Copiar fuentes personalizadas"
+"Copiar configuración de Kitty"
+"Instalar Zsh"
+"Instalar complementos de Zsh"
+"Copiar configuración de Kitty a root"
+"Instalar feh"
+"Instalar ImageMagick"
+"Instalar Scrub"
+"Clonar repositorio blue-sky"
+"Crear directorio de configuración de Polybar"
+"Copiar archivos de configuración de Polybar"
+"Copiar fuentes de Polybar"
+"Actualizar caché de fuentes"
+"Crear directorio de configuración de Picom"
+"Copiar archivo de configuración de Picom"
+"Instalar Fastfetch"
+"Configurar Powerlevel10k para usuario"
+"Configurar Powerlevel10k para root"
+"Copiar .zshrc de usuario"
+"Ajustar permisos de .zshrc de usuario"
+"Copiar .zshrc de root"
+"Copiar archivos de lsd"
+"Instalar bat y lsd"
+"Actualizar .p10k.zsh de usuario"
+"Actualizar .p10k.zsh de root"
+"Crear enlace simbólico .zshrc de root"
+"Crear directorio bin en .config"
+"Copiar y dar permisos a scripts personalizados"
+"Crear directorio zsh-sudo-plugin"
+"Copiar y configurar sudo.plugin.zsh"
+"Instalar npm"
+"Instalar Flameshot"
+"Instalar i3lock"
+"Clonar e instalar i3lock-fancy"
+"Crear enlace simbólico batcat"
+"Realizar actualización final del sistema"
+    "Corregir instalación de Kitty"
+"Reiniciar sesión de usuario"
 )
 
 # Array para guardar las tareas completadas
@@ -75,85 +75,64 @@ declare -a COMPLETED_TASKS=()
 
 # Función para mostrar la lista de verificación
 display_checklist() {
-    clear_screen
-    echo "--- Progreso de la Instalación ---"
-    for task_item in "${ALL_TASKS[@]}"; do
-        local found=0
-        for completed_item in "${COMPLETED_TASKS[@]}"; do
-            [[ "$task_item" == "$completed_item" ]] && { found=1; break; }
-        done
-        
-        if [[ "$found" -eq 1 ]]; then
-            echo "[x] $task_item"
-        else
-            echo "[ ] $task_item"
-        fi
-    done
-    echo "---------------------------------"
-    echo "" # Deja una línea en blanco al final de la checklist
+clear_screen
+echo "--- Progreso de la Instalación ---"
+for task_item in "${ALL_TASKS[@]}"; do
+local found=0
+for completed_item in "${COMPLETED_TASKS[@]}"; do
+[[ "$task_item" == "$completed_item" ]] && { found=1; break; }
+done # <-- ¡CORREGIDO! Antes había un 'F'
+
+if [[ "$found" -eq 1 ]]; then
+echo "[x] $task_item"
+else
+echo "[ ] $task_item"
+fi
+done
+echo "---------------------------------"
+echo "" # Deja una línea en blanco al final de la checklist
 }
 
 # Función para marcar una tarea como completada y actualizar la pantalla
 mark_task_completed() {
-    COMPLETED_TASKS+=("$1")
-    display_checklist
+COMPLETED_TASKS+=("$1")
+display_checklist
 }
 
 # Función para manejar errores y salir (si es necesario)
 handle_error() {
-    local task_name="$1"
-    local error_message="$2"
-    clear_screen
-    echo "¡ERROR!"
-    echo "Falló la tarea: $task_name"
-    echo "Mensaje: $error_message"
-    echo "Abortando el script."
-    # Asegurarse de que el mensaje final no se muestre si hay un error crítico
-    exit 1
-}
-
-# Función para verificar la conexión a Internet
-check_internet_connection() {
-    local log_action="Verificar conectividad a Internet"
-    echo "Comprobando conexión a Internet..."
-    if ping -c 1 -W 3 google.com > /dev/null 2>&1; then
-        echo "Conexión a google.com exitosa."
-    else
-        echo "No se pudo hacer ping a google.com. Comprobando GitHub..."
-        if ping -c 1 -W 3 github.com > /dev/null 2>&1; then
-            echo "Conexión a github.com exitosa."
-        else
-            handle_error "$log_action" "No hay conexión a Internet. Por favor, verifica tu conexión antes de continuar."
-        fi
-    fi
-    mark_task_completed "$log_action"
+local task_name="$1"
+local error_message="$2"
+clear_screen
+echo "¡ERROR!"
+echo "Falló la tarea: $task_name"
+echo "Mensaje: $error_message"
+echo "Abortando el script."
+exit 1
 }
 
 # --- Inicio del Script Principal ---
 
 # Captura de Ctrl+C
 trap '
-    clear_screen
-    echo ""
-    echo "❌ Atención: El script ha sido cancelado."
-    echo "La cancelación de la instalación en medio del proceso podría dejar"
-    echo "tu entorno en un estado inestable o incompleto, requiriendo"
-    echo "una intervención manual para corregirlo."
-    echo "Saliendo..."
-    exit 1
+   clear_screen
+   echo ""
+   echo "❌ Atención: El script ha sido cancelado."
+   echo "La cancelación de la instalación en medio del proceso podría dejar"
+   echo "tu entorno en un estado inestable o incompleto, requiriendo"
+   echo "una intervención manual para corregirlo."
+   echo "Saliendo..."
+   exit 1
 ' SIGINT
 
 display_checklist # Muestra la checklist inicial vacía
 
 # Verificar permisos de root
 if [[ "$(id -u)" -ne 0 ]]; then
-    echo "Este script debe ejecutarse como root."
-    exit 1
+echo "Este script debe ejecutarse como root."
+exit 1
 fi
 mark_task_completed "Verificar permisos de root"
-
-# Realizar comprobación de Internet
-check_internet_connection
 
 # Mensaje de información para el usuario y espera
 clear_screen # Limpia antes de mostrar el mensaje
@@ -161,8 +140,7 @@ echo "======================================================"
 echo "          INICIO DE LA INSTALACIÓN DEL ENTORNO        "
 echo "======================================================"
 echo ""
-echo "¡Atención! RECUERDA CREAR UN PUNTO DE RESTAURACIÓN ANTES DE INSTALAR"
-echo "¡Atención! RECUERDA QUE PARA LA INSTALACIÓN DEBES ESTAR UBICADO EN /HOME/USUARIO"
+echo "¡Atención!"
 echo "Este proceso de instalación puede tardar aproximadamente 10 minutos."
 echo "Por favor, no cierres la terminal ni interrumpas el script (Ctrl+C)."
 echo "La cancelación de la instalación en medio del proceso podría dejar"
@@ -176,17 +154,19 @@ mark_task_completed "Mostrar aviso inicial" # Marca la tarea de aviso como compl
 
 # Actualizar el sistema
 log_action="Actualizar el sistema"
-echo "Realizando 'apt update'..."
-if ! sudo apt update > /dev/null 2>&1; then # Suprimida salida normal
-    echo "Advertencia: 'apt update' falló. Intentando continuar." >&2
+sudo apt update > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+    handle_error "$log_action" "Error al ejecutar 'apt update'."
 fi
 
-echo "Intentando 'parrot-upgrade' o 'apt upgrade'..."
-if ! parrot-upgrade -y > /dev/null 2>&1; then # Suprimida salida normal
-    echo "Advertencia: 'parrot-upgrade' falló o no está disponible. Intentando 'apt upgrade'." >&2
-    if ! sudo apt upgrade -y > /dev/null 2>&1; then # Suprimida salida normal
-        echo "Advertencia: 'apt upgrade' también falló. Intentando continuar, pero el sistema puede no estar actualizado." >&2
-    fi
+# Intentar parrot-upgrade, si falla, usar apt upgrade
+if ! parrot-upgrade -y > /dev/null 2>&1; then # AÑADIDO: Redirigir la salida aquí también
+if ! parrot-upgrade -y > /dev/null 2>&1; then
+echo "Advertencia: 'parrot-upgrade' falló o no está disponible. Intentando 'apt upgrade'." >&2
+if ! sudo apt upgrade -y > /dev/null 2>&1; then
+handle_error "$log_action" "Error durante la actualización del sistema con 'apt upgrade'."
+fi
+fi 
 fi
 sudo apt autoremove -y > /dev/null 2>&1 # Limpia paquetes viejos
 mark_task_completed "$log_action"
@@ -194,16 +174,15 @@ mark_task_completed "$log_action"
 # Instalar dependencias principales
 log_action="Instalar dependencias principales"
 deps=(
-    build-essential git vim libxcb-util0-dev libxcb-ewmh-dev
-    libxcb-randr0-dev libxcb-icccm4-dev libxcb-keysyms1-dev
-    libxcb-xinerama0-dev libasound2-dev libxcb-xtest0-dev
-    libxcb-shape0-dev libxcb-xinput-dev # Añadida libxcb-xinput-dev
+build-essential git vim libxcb-util0-dev libxcb-ewmh-dev
+libxcb-randr0-dev libxcb-icccm4-dev libxcb-keysyms1-dev
+libxcb-xinerama0-dev libasound2-dev libxcb-xtest0-dev
+libxcb-shape0-dev libxcb-xinput-dev # Añadida libxcb-xinput-dev
 )
-echo "Instalando dependencias principales: ${deps[*]}..."
 for dep in "${deps[@]}"; do
-    if ! sudo apt install -y "$dep" > /dev/null 2>&1; then
-        echo "Advertencia: La dependencia '$dep' no se instaló correctamente. Esto podría causar problemas más adelante." >&2
-    fi
+if ! sudo apt install -y "$dep" > /dev/null 2>&1; then
+echo "Advertencia: La dependencia '$dep' no se instaló correctamente. Esto podría causar problemas más adelante." >&2
+fi
 done
 mark_task_completed "$log_action"
 
@@ -211,567 +190,651 @@ mark_task_completed "$log_action"
 log_action="Definir directorio home del usuario"
 user_home=$(getent passwd "$SUDO_USER" | cut -d: -f6)
 if [ -z "$user_home" ]; then
-    handle_error "$log_action" "No se pudo obtener el directorio home para el usuario $SUDO_USER. Asegúrate de que el usuario $SUDO_USER existe."
+handle_error "$log_action" "No se pudo obtener el directorio home para el usuario $SUDO_USER."
 fi
-echo "Directorio home del usuario ($SUDO_USER): $user_home"
 mark_task_completed "$log_action"
 
 # Clonar bspwm y sxhkd
 log_action="Clonar bspwm y sxhkd"
 cd "$user_home" || handle_error "$log_action" "No se pudo cambiar al directorio home del usuario: $user_home."
-
-# --- Comprobación y Clonación de bspwm ---
-if [ -d "$user_home/bspwm" ]; then
-    echo "El directorio $user_home/bspwm ya existe. Saltando clonación de bspwm."
-else
-    echo "Clonando bspwm desde https://github.com/baskerville/bspwm.git en $user_home..."
-    # Descomenta la siguiente línea para eliminar el directorio existente si lo necesitas para depuración
-    # sudo -u "$SUDO_USER" rm -rf "$user_home/bspwm"
-    sudo -u "$SUDO_USER" git clone https://github.com/baskerville/bspwm.git || handle_error "$log_action" "Error al clonar bspwm. Revisa la conexión a Internet o los permisos."
+sudo -u "$SUDO_USER" git clone https://github.com/baskerville/bspwm.git > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al clonar bspwm."
 fi
-
-# --- Comprobación y Clonación de sxhkd ---
-if [ -d "$user_home/sxhkd" ]; then
-    echo "El directorio $user_home/sxhkd ya existe. Saltando clonación de sxhkd."
-else
-    echo "Clonando sxhkd desde https://github.com/baskerville/sxhkd.git en $user_home..."
-    # Descomenta la siguiente línea para eliminar el directorio existente si lo necesitas para depuración
-    # sudo -u "$SUDO_USER" rm -rf "$user_home/sxhkd"
-    sudo -u "$SUDO_USER" git clone https://github.com/baskerville/sxhkd.git || handle_error "$log_action" "Error al clonar sxhkd. Revisa la conexión a Internet o los permisos."
+sudo -u "$SUDO_USER" git clone https://github.com/baskerville/sxhkd.git > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al clonar sxhkd."
 fi
 mark_task_completed "$log_action"
 
 # Compilar e instalar bspwm
 log_action="Compilar e instalar bspwm"
-cd "$user_home/bspwm" || handle_error "$log_action" "No se pudo cambiar al directorio de bspwm. Asegúrate de que bspwm fue clonado correctamente."
-echo "Compilando bspwm..."
-sudo -u "$SUDO_USER" make # La salida es visible para depuración en caso de error
+cd "$user_home/bspwm" || handle_error "$log_action" "No se pudo cambiar al directorio de bspwm."
+sudo -u "$SUDO_USER" make > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "$log_action" "Error al compilar bspwm. Revisa los logs para dependencias faltantes."
+handle_error "$log_action" "Error al compilar bspwm. Revisa los logs para dependencias faltantes."
 fi
-echo "Instalando bspwm..."
-sudo make install # La salida es visible para depuración
+sudo make install > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "$log_action" "Error al instalar bspwm. Revisa los logs."
+handle_error "$log_action" "Error al instalar bspwm. Revisa los logs."
 fi
 mark_task_completed "$log_action"
 
 # Compilar e instalar sxhkd
 log_action="Compilar e instalar sxhkd"
-cd "$user_home/sxhkd" || handle_error "$log_action" "No se pudo cambiar al directorio de sxhkd. Asegúrate de que sxhkd fue clonado correctamente."
-echo "Compilando sxhkd..."
-sudo -u "$SUDO_USER" make # La salida es visible para depuración en caso de error
+cd "$user_home/sxhkd" || handle_error "$log_action" "No se pudo cambiar al directorio de sxhkd."
+sudo -u "$SUDO_USER" make > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "$log_action" "Error al compilar sxhkd. Revisa los logs para dependencias faltantes."
+handle_error "$log_action" "Error al compilar sxhkd. Revisa los logs para dependencias faltantes."
 fi
-echo "Instalando sxhkd..."
-sudo make install # La salida es visible para depuración
+sudo make install > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "$log_action" "Error al instalar sxhkd. Revisa los logs."
+handle_error "$log_action" "Error al instalar sxhkd. Revisa los logs."
 fi
 mark_task_completed "$log_action"
 
 # Instalar libxinerama
 log_action="Instalar libxinerama1 y libxinerama-dev"
-echo "Instalando libxinerama1 y libxinerama-dev..."
-if ! sudo apt install -y libxinerama1 libxinerama-dev > /dev/null 2>&1; then
-    echo "Advertencia: Falló la instalación de libxinerama. Esto podría afectar el funcionamiento de algunas aplicaciones." >&2
+sudo apt install -y libxinerama1 libxinerama-dev > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al instalar libxinerama. Asegúrate de que los repositorios estén correctos."
 fi
 mark_task_completed "$log_action"
 
 # Instalar Kitty
 log_action="Instalar Kitty"
-echo "Instalando Kitty..."
-if ! sudo apt install -y kitty > /dev/null 2>&1; then
-    echo "Advertencia: Falló la instalación de Kitty. Es posible que tengas que instalarlo manualmente." >&2
+sudo apt install -y kitty > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al instalar Kitty. Asegúrate de que los repositorios estén correctos."
 fi
 mark_task_completed "$log_action"
 
+# --- CORRECCIÓN DE KITTY ---
+log_action="Corregir instalación de Kitty"
+sudo rm -f /usr/bin/kitty > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+    echo "Advertencia: No se pudo eliminar el binario existente de Kitty en /usr/bin/kitty (podría no existir, lo cual es normal). Continuando..." >&2
+fi
+sudo tee /usr/local/bin/kitty > /dev/null << EOF
+#!/usr/bin/env bash
+exec /home/sinh/.local/kitty.app/bin/kitty "\$@"
+EOF
+if [ $? -ne 0 ]; then
+    handle_error "$log_action" "Error al crear el script wrapper para Kitty en /usr/local/bin."
+fi
+sudo chmod +x /usr/local/bin/kitty > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+    handle_error "$log_action" "Error al dar permisos de ejecución al script wrapper de Kitty."
+fi
+mark_task_completed "$log_action"
+# --- FIN DE LA CORRECCIÓN DE KITTY ---
+
 # Crear directorios de configuración
 log_action="Crear directorios de configuración"
-echo "Creando directorios de configuración para el usuario: .config/bspwm, .config/sxhkd, .config/bspwm/scripts, fondos..."
 sudo -u "$SUDO_USER" mkdir -p \
-    "$user_home/.config/bspwm" \
-    "$user_home/.config/sxhkd" \
-    "$user_home/.config/bspwm/scripts" \
-    "$user_home/fondos" || handle_error "$log_action" "Error al crear directorios de configuración para el usuario."
-mark_task_completed "$log_action"
-
-# Copiar fondos de pantalla
-log_action="Copiar fondos de pantalla"
-echo "Copiando fondos de pantalla de '$user_home/Entorno-Linux/fondos/' a '$user_home/fondos/'..."
-# Realizar la copia como el usuario, para asegurar permisos de lectura del origen y escritura en destino
-sudo -u "$SUDO_USER" cp -r "$user_home/Entorno-Linux/fondos/"* "$user_home/fondos/" || handle_error "$log_action" "Error al copiar fondos. Asegúrate de que '$user_home/Entorno-Linux/fondos/' exista y tenga permisos de lectura."
+"$user_home/.config/bspwm" \
+"$user_home/.config/sxhkd" \
+"$user_home/.config/bspwm/scripts" \
+"$user_home/fondos" > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al crear directorios de configuración para el usuario."
+fi
+sudo cp -r "$user_home/Entorno-Linux/fondos/"* "$user_home/fondos/" > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al copiar fondos. Asegúrate de que '$user_home/Entorno-Linux/fondos/' exista y tenga permisos."
+fi
 mark_task_completed "$log_action"
 
 # Copiar los archivos de configuración a las carpetas de configuración
 log_action="Copiar archivos de configuración de bspwm y sxhkd"
-echo "Copiando archivos de configuración de bspwm y sxhkd..."
-sudo cp "$user_home/Entorno-Linux/Config/bspwm/bspwmrc" "$user_home/.config/bspwm/" || handle_error "$log_action" "Error al copiar bspwmrc. Asegúrate de que '$user_home/Entorno-Linux/Config/bspwm/bspwmrc' exista."
-sudo cp "$user_home/Entorno-Linux/Config/bspwm/setup_monitors.sh" "$user_home/.config/bspwm/" || handle_error "$log_action" "Error al copiar setup_monitors.sh. Asegúrate de que exista."
-sudo cp "$user_home/Entorno-Linux/Config/bspwm/setup_monitorsPortatil.sh" "$user_home/.config/bspwm/" || handle_error "$log_action" "Error al copiar setup_monitorsPortatil.sh. Asegúrate de que exista."
-sudo cp "$user_home/Entorno-Linux/Config/sxhkd/sxhkdrc" "$user_home/.config/sxhkd/" || handle_error "$log_action" "Error al copiar sxhkdrc. Asegúrate de que exista."
+sudo cp "$user_home/Entorno-Linux/Config/bspwm/bspwmrc" "$user_home/.config/bspwm/" > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al copiar bspwmrc. Asegúrate de que '$user_home/Entorno-Linux/Config/bspwm/bspwmrc' exista."
+fi
+sudo cp "$user_home/Entorno-Linux/Config/bspwm/setup_monitors.sh" "$user_home/.config/bspwm/" > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al copiar setup_monitors.sh. Asegúrate de que exista."
+fi
+sudo cp "$user_home/Entorno-Linux/Config/bspwm/setup_monitorsPortatil.sh" "$user_home/.config/bspwm/" > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al copiar setup_monitorsPortatil.sh. Asegúrate de que exista."
+fi
+sudo cp "$user_home/Entorno-Linux/Config/sxhkd/sxhkdrc" "$user_home/.config/sxhkd/" > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al copiar sxhkdrc. Asegúrate de que exista."
+fi
 mark_task_completed "$log_action"
 
 # Copiar el script bspwm_resize al directorio de scripts
 log_action="Copiar y hacer ejecutable bspwm_resize"
-echo "Copiando y haciendo ejecutable bspwm_resize..."
-sudo cp "$user_home/Entorno-Linux/Config/bspwm/scripts/bspwm_resize" "$user_home/.config/bspwm/scripts/" || handle_error "$log_action" "Error al copiar bspwm_resize. Asegúrate de que exista."
-# Hacer ejecutable el script bspwmrc y bspwm_resize como el usuario
-sudo -u "$SUDO_USER" chmod +x "$user_home/.config/bspwm/bspwmrc" || handle_error "$log_action" "Error al dar permisos de ejecución a bspwmrc."
-sudo -u "$SUDO_USER" chmod +x "$user_home/.config/bspwm/scripts/bspwm_resize" || handle_error "$log_action" "Error al dar permisos de ejecución a bspwm_resize."
+sudo cp "$user_home/Entorno-Linux/Config/bspwm/scripts/bspwm_resize" "$user_home/.config/bspwm/scripts/" > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al copiar bspwm_resize. Asegúrate de que exista."
+fi
+# Hacer ejecutable el script bspwmrc y bspwm_resize
+chmod +x "$user_home/.config/bspwm/bspwmrc" > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al dar permisos de ejecución a bspwmrc."
+fi
+chmod +x "$user_home/.config/bspwm/scripts/bspwm_resize" > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al dar permisos de ejecución a bspwm_resize."
+fi
 mark_task_completed "$log_action"
 
 # Instalar paquetes adicionales necesarios para Polybar
 log_action="Instalar dependencias adicionales para Polybar"
-echo "Instalando dependencias adicionales para Polybar..."
-if ! sudo apt install -y \
-    cmake cmake-data pkg-config python3-sphinx \
-    libcairo2-dev libxcb1-dev libxcb-util0-dev \
-    libxcb-randr0-dev libxcb-composite0-dev \
-    python3-xcbgen xcb-proto libxcb-image0-dev \
-    libxcb-ewmh-dev libxcb-icccm4-dev \
-    libxcb-xkb-dev libxcb-xrm-dev \
-    libxcb-cursor-dev libasound2-dev libpulse-dev \
-    libjsoncpp-dev libmpdclient-dev libuv1-dev libnl-genl-3-dev \
-    libxcb-xinput-dev > /dev/null 2>&1; then # Mantenida redirección para paquetes, pueden ser muchos
-    echo "Advertencia: Falló la instalación de algunas dependencias de Polybar. Revisa la conexión o los repositorios." >&2
+sudo apt install -y \
+cmake cmake-data pkg-config python3-sphinx \
+libcairo2-dev libxcb1-dev libxcb-util0-dev \
+libxcb-randr0-dev libxcb-composite0-dev \
+python3-xcbgen xcb-proto libxcb-image0-dev \
+libxcb-ewmh-dev libxcb-icccm4-dev \
+libxcb-xkb-dev libxcb-xrm-dev \
+libxcb-cursor-dev libasound2-dev libpulse-dev \
+libjsoncpp-dev libmpdclient-dev libuv1-dev libnl-genl-3-dev \
+    libxcb-xinput-dev 
+    libxcb-xinput-dev # Asegurada esta dependencia aquí también
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al instalar algunas dependencias de Polybar. Revisa la conexión o los repositorios."
 fi
 mark_task_completed "$log_action"
 
 # Descargar e instalar Polybar como usuario no privilegiado
 log_action="Descargar y instalar Polybar"
-echo "Preparando para descargar e instalar Polybar..."
-cd "$user_home/Downloads" || handle_error "$log_action" "No se pudo cambiar al directorio Downloads ($user_home/Downloads). Asegúrate de que el directorio existe y tiene permisos."
-
-if [ -d "polybar" ]; then
-    echo "El directorio polybar ya existe en Downloads. Saltando clonación."
-else
-    echo "Clonando Polybar desde https://github.com/polybar/polybar.git..."
-    sudo -u "$SUDO_USER" git clone --recursive https://github.com/polybar/polybar || handle_error "$log_action" "Error al clonar Polybar. Revisa tu conexión a internet o los permisos."
-fi
-
-cd polybar && sudo -u "$SUDO_USER" mkdir -p build && cd build || handle_error "$log_action" "No se pudo preparar el directorio de Polybar para la compilación."
-
-echo "Ejecutando cmake para Polybar..."
-sudo -u "$SUDO_USER" cmake .. # La salida es visible para depuración
+cd "$user_home/Downloads" || handle_error "$log_action" "No se pudo cambiar al directorio Downloads ($user_home/Downloads)."
+sudo -u "$SUDO_USER" git clone --recursive https://github.com/polybar/polybar
 if [ $? -ne 0 ]; then
-    handle_error "$log_action" "Error al ejecutar cmake para Polybar. Revisa la salida de cmake para dependencias faltantes."
+handle_error "$log_action" "Error al clonar Polybar. Revisa tu conexión a internet o los permisos."
 fi
-echo "Compilando Polybar..."
-sudo -u "$SUDO_USER" make -j"$(nproc)" # La salida es visible para depuración
+cd polybar && sudo -u "$SUDO_USER" mkdir build && cd build || handle_error "$log_action" "No se pudo preparar el directorio de Polybar."
+
+# IMPORTANTE: Aquí la salida de cmake NO se redirige para ver errores específicos.
+
+# Si la instalación es exitosa, puedes añadir "> /dev/null 2>&1" al final de la línea.
+sudo -u "$SUDO_USER" cmake ..
 if [ $? -ne 0 ]; then
-    handle_error "$log_action" "Error al compilar Polybar. Revisa los logs de compilación."
+handle_error "$log_action" "Error al ejecutar cmake para Polybar. Revisa la salida de cmake para dependencias faltantes."
 fi
-echo "Instalando Polybar..."
-sudo make install # La salida es visible para depuración
+sudo -u "$SUDO_USER" make -j"$(nproc)" > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "$log_action" "Error al instalar Polybar."
+handle_error "$log_action" "Error al compilar Polybar. Revisa los logs de compilación."
+fi
+sudo make install > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al instalar Polybar."
 fi
 mark_task_completed "$log_action"
 
 # Instalar dependencias Picom
 log_action="Instalar dependencias de Picom"
-echo "Instalando dependencias de Picom..."
-if ! sudo apt install -y \
-    meson libxext-dev libxcb1-dev libxcb-damage0-dev \
-    libxcb-xfixes0-dev libxcb-shape0-dev \
-    libxcb-render-util0-dev libxcb-render0-dev \
-    libxcb-composite0-dev libxcb-image0-dev \
-    libxcb-present-dev libxcb-xinerama0-dev \
-    libpixman-1-dev libdbus-1-dev libconfig-dev \
-    libgl1-mesa-dev libpcre2-dev libevdev-dev \
-    uthash-dev libev-dev libx11-xcb-dev libxcb-glx0-dev > /dev/null 2>&1; then # Mantenida redirección para paquetes
-    echo "Advertencia: Falló la instalación de dependencias de Picom. Revisa la conexión o los repositorios." >&2
+sudo apt install -y \
+meson libxext-dev libxcb1-dev libxcb-damage0-dev \
+libxcb-xfixes0-dev libxcb-shape0-dev \
+libxcb-render-util0-dev libxcb-render0-dev \
+libxcb-composite0-dev libxcb-image0-dev \
+libxcb-present-dev libxcb-xinerama0-dev \
+libpixman-1-dev libdbus-1-dev libconfig-dev \
+libgl1-mesa-dev libpcre2-dev libevdev-dev \
+uthash-dev libev-dev libx11-xcb-dev libxcb-glx0-dev
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al instalar dependencias de Picom. Revisa la conexión o los repositorios."
 fi
 mark_task_completed "$log_action"
 
 # Instalar libpcre3
 log_action="Instalar libpcre3 y libpcre3-dev"
-echo "Instalando libpcre3 y libpcre3-dev..."
-if ! sudo apt install -y libpcre3 libpcre3-dev > /dev/null 2>&1; then
-    echo "Advertencia: Falló la instalación de libpcre3. Asegúrate de que los repositorios estén correctos." >&2
+sudo apt install -y libpcre3 libpcre3-dev > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al instalar libpcre3. Asegúrate de que los repositorios estén correctos."
 fi
 mark_task_completed "$log_action"
 
 # Descargar e instalar Picom como usuario no privilegiado
 log_action="Descargar y instalar Picom"
-echo "Preparando para descargar e instalar Picom..."
 cd "$user_home/Downloads" || handle_error "$log_action" "No se pudo cambiar al directorio Downloads ($user_home/Downloads)."
-
-if [ -d "picom" ]; then
-    echo "El directorio picom ya existe en Downloads. Saltando clonación."
-else
-    echo "Clonando Picom desde https://github.com/ibhagwan/picom.git..."
-    sudo -u "$SUDO_USER" git clone https://github.com/ibhagwan/picom.git || handle_error "$log_action" "Error al clonar Picom. Revisa tu conexión a internet o los permisos."
-fi
-
-cd picom && sudo -u "$SUDO_USER" git submodule update --init --recursive || handle_error "$log_action" "Error al actualizar submódulos de Picom. Revisa la conexión."
-echo "Configurando meson para Picom..."
-sudo -u "$SUDO_USER" meson --buildtype=release . build # La salida es visible para depuración
+sudo -u "$SUDO_USER" git clone https://github.com/ibhagwan/picom.git
 if [ $? -ne 0 ]; then
-    handle_error "$log_action" "Error al configurar meson para Picom. Revisa la salida para dependencias faltantes."
+handle_error "$log_action" "Error al clonar Picom. Revisa tu conexión a internet o los permisos."
 fi
-echo "Compilando Picom..."
-sudo -u "$SUDO_USER" ninja -C build # La salida es visible para depuración
+cd picom && sudo -u "$SUDO_USER" git submodule update --init --recursive > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "$log_action" "Error al compilar Picom. Revisa los logs de compilación."
+handle_error "$log_action" "Error al actualizar submódulos de Picom. Revisa la conexión."
 fi
-echo "Instalando Picom..."
-sudo ninja -C build install # La salida es visible para depuración
+# IMPORTANTE: Aquí la salida de meson NO se redirige para ver errores específicos.
+sudo -u "$SUDO_USER" meson --buildtype=release . build
 if [ $? -ne 0 ]; then
-    handle_error "$log_action" "Error al instalar Picom."
+handle_error "$log_action" "Error al configurar meson para Picom. Revisa la salida para dependencias faltantes."
+fi
+sudo -u "$SUDO_USER" ninja -C build > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al compilar Picom. Revisa los logs de compilación."
+fi
+sudo ninja -C build install > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al instalar Picom."
 fi
 mark_task_completed "$log_action"
 
 # Instalar Rofi
 log_action="Instalar Rofi"
-echo "Instalando Rofi..."
-if ! sudo apt install -y rofi > /dev/null 2>&1; then
-    echo "Advertencia: Falló la instalación de Rofi." >&2
+sudo apt install -y rofi > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al instalar Rofi."
 fi
 mark_task_completed "$log_action"
 
 # Instalar bspwm desde repositorio (Esto puede ser redundante si ya se compiló, pero se mantiene si es necesario para dependencias o versión de repo)
 log_action="Instalar bspwm desde los repositorios"
-echo "Instalando bspwm desde los repositorios (si es necesario)..."
-if ! sudo apt install -y bspwm > /dev/null 2>&1; then
-    echo "Advertencia: Falló la instalación de bspwm desde el repositorio." >&2
+sudo apt install -y bspwm > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al instalar bspwm desde el repositorio."
 fi
 mark_task_completed "$log_action"
 
 # Copiar fuentes personalizadas
 log_action="Copiar fuentes personalizadas"
-echo "Copiando fuentes personalizadas a /usr/local/share/fonts/..."
-sudo cp -r "$user_home/Entorno-Linux/fonts/"* /usr/local/share/fonts/ || handle_error "$log_action" "Error al copiar fuentes. Asegúrate de que '$user_home/Entorno-Linux/fonts/' exista y tenga contenido."
+sudo cp -r "$user_home/Entorno-Linux/fonts/"* /usr/local/share/fonts/ > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al copiar fuentes. Asegúrate de que '$user_home/Entorno-Linux/fonts/' exista y tenga contenido."
+fi
 mark_task_completed "$log_action"
 
 # Copiar configuración de Kitty
 log_action="Copiar configuración de Kitty"
-echo "Copiando configuración de Kitty para el usuario..."
-sudo -u "$SUDO_USER" mkdir -p "$user_home/.config/kitty" || handle_error "$log_action" "Error al crear directorio de config de Kitty para el usuario."
-sudo cp -r "$user_home/Entorno-Linux/Config/kitty/." "$user_home/.config/kitty/" || handle_error "$log_action" "Error al copiar config de Kitty para el usuario. Asegúrate de que '$user_home/Entorno-Linux/Config/kitty/' exista."
+sudo -u "$SUDO_USER" mkdir -p "$user_home/.config/kitty" > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al crear directorio de config de Kitty para el usuario."
+fi
+sudo cp -r "$user_home/Entorno-Linux/Config/kitty/." "$user_home/.config/kitty/" > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al copiar config de Kitty para el usuario. Asegúrate de que '$user_home/Entorno-Linux/Config/kitty/' exista."
+fi
 mark_task_completed "$log_action"
 
 # Instalar Zsh y plugins
 log_action="Instalar Zsh"
-echo "Instalando Zsh, zsh-autosuggestions y zsh-syntax-highlighting..."
-if ! sudo apt install -y zsh zsh-autosuggestions zsh-syntax-highlighting > /dev/null 2>&1; then
-    echo "Advertencia: Falló la instalación de Zsh o sus complementos. Revisa los repositorios." >&2
+sudo apt install -y zsh zsh-autosuggestions zsh-syntax-highlighting > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al instalar Zsh o sus complementos. Revisa los repositorios."
 fi
 mark_task_completed "$log_action"
 mark_task_completed "Instalar complementos de Zsh" # Depende de la anterior
 
 # Copiar configuración de Kitty a root
 log_action="Copiar configuración de Kitty a root"
-echo "Copiando configuración de Kitty para root..."
-sudo mkdir -p /root/.config/kitty || handle_error "$log_action" "Error al crear directorio de config de Kitty para root."
-sudo cp -r "$user_home/.config/kitty/." /root/.config/kitty/ || handle_error "$log_action" "Error al copiar config de Kitty para root."
+sudo mkdir -p /root/.config/kitty > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al crear directorio de config de Kitty para root."
+fi
+sudo cp -r "$user_home/.config/kitty/." /root/.config/kitty/ > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al copiar config de Kitty para root."
+fi
 mark_task_completed "$log_action"
 
 # Instalar feh
 log_action="Instalar feh"
-echo "Instalando feh..."
-if ! sudo apt install -y feh > /dev/null 2>&1; then
-    echo "Advertencia: Falló la instalación de feh." >&2
+sudo apt install -y feh > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al instalar feh."
 fi
 mark_task_completed "$log_action"
 
 # Instalar ImageMagick
 log_action="Instalar ImageMagick"
-echo "Instalando ImageMagick..."
-if ! sudo apt install -y imagemagick > /dev/null 2>&1; then
-    echo "Advertencia: Falló la instalación de ImageMagick." >&2
+sudo apt install -y imagemagick > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al instalar ImageMagick."
 fi
 mark_task_completed "$log_action"
 
 # Instalar Scrub
 log_action="Instalar Scrub"
-echo "Instalando Scrub..."
-if ! sudo apt install -y scrub > /dev/null 2>&1; then
-    echo "Advertencia: Falló la instalación de Scrub." >&2
+sudo apt install -y scrub > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al instalar Scrub."
 fi
 mark_task_completed "$log_action"
 
 # Clonar blue-sky
 log_action="Clonar repositorio blue-sky"
-echo "Clonando repositorio blue-sky..."
 cd "$user_home/Downloads" || handle_error "$log_action" "No se pudo cambiar al directorio Downloads ($user_home/Downloads)."
-if [ -d "blue-sky" ]; then
-    echo "El directorio blue-sky ya existe en Downloads. Saltando clonación."
-else
-    sudo -u "$SUDO_USER" git clone https://github.com/VaughnValle/blue-sky \
-        "$user_home/Downloads/blue-sky" || handle_error "$log_action" "Error al clonar blue-sky. Revisa tu conexión a internet o los permisos."
+sudo -u "$SUDO_USER" git clone https://github.com/VaughnValle/blue-sky \
+"$user_home/Downloads/blue-sky" > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al clonar blue-sky. Revisa tu conexión a internet o los permisos."
 fi
 mark_task_completed "$log_action"
 
 # Crear y copiar Polybar config
 log_action="Crear directorio de configuración de Polybar"
-echo "Creando directorio de configuración de Polybar para el usuario..."
-sudo -u "$SUDO_USER" mkdir -p "$user_home/.config/polybar" || handle_error "$log_action" "Error al crear directorio de Polybar para el usuario."
+sudo -u "$SUDO_USER" mkdir -p "$user_home/.config/polybar" > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al crear directorio de Polybar para el usuario."
+fi
 mark_task_completed "$log_action"
 
 log_action="Copiar archivos de configuración de Polybar"
-echo "Copiando archivos de configuración de Polybar..."
 sudo cp -a "$user_home/Entorno-Linux/Config/polybar/." \
-    "$user_home/.config/polybar/" || handle_error "$log_action" "Error al copiar config de Polybar. Asegúrate de que '$user_home/Entorno-Linux/Config/polybar/' exista."
+"$user_home/.config/polybar/" > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al copiar config de Polybar. Asegúrate de que '$user_home/Entorno-Linux/Config/polybar/' exista."
+fi
 mark_task_completed "$log_action"
 
 # Copiar fuentes de Polybar y actualizar caché
 log_action="Copiar fuentes de Polybar"
-echo "Copiando fuentes de Polybar..."
 sudo cp -r "$user_home/Entorno-Linux/Config/polybar/fonts/"* \
-    /usr/share/fonts/truetype/ || handle_error "$log_action" "Error al copiar fuentes de Polybar. Asegúrate de que '$user_home/Entorno-Linux/Config/polybar/fonts/' exista."
+/usr/share/fonts/truetype/ > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al copiar fuentes de Polybar. Asegúrate de que '$user_home/Entorno-Linux/Config/polybar/fonts/' exista."
+fi
 mark_task_completed "$log_action"
 
 log_action="Actualizar caché de fuentes"
-echo "Actualizando caché de fuentes..."
 sudo fc-cache -f -v > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    echo "Advertencia: Falló la actualización de la caché de fuentes." >&2
+handle_error "$log_action" "Error al actualizar caché de fuentes."
 fi
 mark_task_completed "$log_action"
 
 # Crear y copiar Picom conf
 log_action="Crear directorio de configuración de Picom"
-echo "Creando directorio de configuración de Picom para el usuario..."
-sudo -u "$SUDO_USER" mkdir -p "$user_home/.config/picom" || handle_error "$log_action" "Error al crear directorio de Picom para el usuario."
+sudo -u "$SUDO_USER" mkdir -p "$user_home/.config/picom" > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al crear directorio de Picom para el usuario."
+fi
 mark_task_completed "$log_action"
 
 log_action="Copiar archivo de configuración de Picom"
-echo "Copiando archivo de configuración de Picom..."
 sudo cp "$user_home/Entorno-Linux/Config/picom/picom.conf" \
-    "$user_home/.config/picom/" || handle_error "$log_action" "Error al copiar config de Picom. Asegúrate de que '$user_home/Entorno-Linux/Config/picom/picom.conf' exista."
+"$user_home/.config/picom/" > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al copiar config de Picom. Asegúrate de que '$user_home/Entorno-Linux/Config/picom/picom.conf' exista."
+fi
 mark_task_completed "$log_action"
 
 # Instalar Fastfetch
 log_action="Instalar Fastfetch"
-echo "Preparando para descargar e instalar Fastfetch..."
 cd "$user_home/Downloads" || handle_error "$log_action" "No se pudo cambiar al directorio Downloads ($user_home/Downloads)."
-
-if [ -d "fastfetch" ]; then
-    echo "El directorio fastfetch ya existe en Downloads. Saltando clonación."
-else
-    echo "Clonando Fastfetch desde https://github.com/fastfetch-cli/fastfetch.git..."
-    sudo -u "$SUDO_USER" git clone https://github.com/fastfetch-cli/fastfetch.git || handle_error "$log_action" "Error al clonar Fastfetch. Revisa tu conexión a internet o los permisos."
+sudo -u "$SUDO_USER" git clone https://github.com/fastfetch-cli/fastfetch.git
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al clonar Fastfetch. Revisa tu conexión a internet o los permisos."
 fi
-
 cd fastfetch || handle_error "$log_action" "No se pudo cambiar al directorio de Fastfetch."
-echo "Configurando cmake para Fastfetch..."
-sudo -u "$SUDO_USER" cmake -B build -DCCMAKE_BUILD_TYPE=Release # La salida es visible para depuración
+sudo -u "$SUDO_USER" cmake -B build -DCMAKE_BUILD_TYPE=Release > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "$log_action" "Error al configurar cmake para Fastfetch. Revisa la salida de cmake."
+handle_error "$log_action" "Error al configurar cmake para Fastfetch. Revisa la salida de cmake."
 fi
-echo "Compilando Fastfetch..."
-sudo -u "$SUDO_USER" cmake --build build --config Release --target fastfetch # La salida es visible para depuración
+sudo -u "$SUDO_USER" cmake --build build --config Release --target fastfetch > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "$log_action" "Error al compilar Fastfetch. Revisa los logs de compilación."
+handle_error "$log_action" "Error al compilar Fastfetch. Revisa los logs de compilación."
 fi
-echo "Instalando Fastfetch en /usr/local/bin..."
-sudo cp build/fastfetch /usr/local/bin/ || handle_error "$log_action" "Error al instalar Fastfetch en /usr/local/bin."
+sudo cp build/fastfetch /usr/local/bin/ > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al instalar Fastfetch en /usr/local/bin."
+fi
 mark_task_completed "$log_action"
 
 # Configurar Powerlevel10k
 log_action="Configurar Powerlevel10k para usuario"
-echo "Configurando Powerlevel10k para el usuario..."
-if [ -d "$user_home/powerlevel10k" ]; then
-    echo "El directorio powerlevel10k ya existe para el usuario. Saltando clonación."
-else
-    sudo -u "$SUDO_USER" git clone --depth=1 \
-        https://github.com/romkatv/powerlevel10k.git "$user_home/powerlevel10k" || handle_error "$log_action" "Error al clonar powerlevel10k para el usuario."
+sudo -u "$SUDO_USER" git clone --depth=1 \
+https://github.com/romkatv/powerlevel10k.git "$user_home/powerlevel10k" > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al clonar powerlevel10k para el usuario."
 fi
-# Asegúrate de que el .zshrc no tenga ya la línea para evitar duplicados si el script se corre varias veces
-grep -q 'source $HOME/powerlevel10k/powerlevel10k.zsh-theme' "$user_home/.zshrc" || \
-    echo 'source $HOME/powerlevel10k/powerlevel10k.zsh-theme' >> "$user_home/.zshrc" || handle_error "$log_action" "Error al configurar .zshrc para powerlevel10k del usuario."
+echo 'source $HOME/powerlevel10k/powerlevel10k.zsh-theme' >> \
+"$user_home/.zshrc" > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al configurar .zshrc para powerlevel10k del usuario."
+fi
 mark_task_completed "$log_action"
 
 log_action="Configurar Powerlevel10k para root"
-echo "Configurando Powerlevel10k para root..."
-if [ -d "/root/powerlevel10k" ]; then
-    echo "El directorio powerlevel10k ya existe para root. Saltando clonación."
-else
-    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /root/powerlevel10k || handle_error "$log_action" "Error al clonar powerlevel10k para root."
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /root/powerlevel10k > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al clonar powerlevel10k para root."
 fi
-grep -q 'source /root/powerlevel10k/powerlevel10k.zsh-theme' /root/.zshrc || \
-    echo 'source /root/powerlevel10k/powerlevel10k.zsh-theme' >> /root/.zshrc || handle_error "$log_action" "Error al configurar .zshrc para powerlevel10k de root."
+echo 'source /root/powerlevel10k/powerlevel10k.zsh-theme' >> /root/.zshrc > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al configurar .zshrc para powerlevel10k de root."
+fi
 mark_task_completed "$log_action"
 
 # Copiar .zshrc de usuario y root
 log_action="Copiar .zshrc de usuario"
-echo "Copiando .zshrc de usuario..."
 sudo cp "$user_home/Entorno-Linux/Config/zshrc/user/.zshrc" \
-    "$user_home/.zshrc" || handle_error "$log_action" "Error al copiar .zshrc de usuario. Asegúrate de que '$user_home/Entorno-Linux/Config/zshrc/user/.zshrc' exista."
+"$user_home/.zshrc" > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al copiar .zshrc de usuario. Asegúrate de que '$user_home/Entorno-Linux/Config/zshrc/user/.zshrc' exista."
+fi
 mark_task_completed "$log_action"
 
 log_action="Ajustar permisos de .zshrc de usuario"
-echo "Ajustando permisos de .zshrc de usuario..."
-chown "$SUDO_USER":"$SUDO_USER" "$user_home/.zshrc" || handle_error "$log_action" "Error al cambiar propietario de .zshrc de usuario."
-chmod 644 "$user_home/.zshrc" || handle_error "$log_action" "Error al cambiar permisos de .zshrc de usuario."
+chown "$SUDO_USER":"$SUDO_USER" "$user_home/.zshrc" > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al cambiar propietario de .zshrc de usuario."
+fi
+chmod 644 "$user_home/.zshrc" > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al cambiar permisos de .zshrc de usuario."
+fi
 mark_task_completed "$log_action"
 
-log_action="Copiar .zshrc de root (seguro)" # Tarea renombrada para mayor claridad
-echo "Copiando .zshrc de root de forma segura (sin enlaces simbólicos)..."
-cp "$user_home/Entorno-Linux/Config/zshrc/root/.zshrc" /root/.zshrc || handle_error "$log_action" "Error al copiar .zshrc de root. Asegúrate de que '$user_home/Entorno-Linux/Config/zshrc/root/.zshrc' exista."
-chown root:root /root/.zshrc || handle_error "$log_action" "Error al cambiar propietario de .zshrc de root."
-chmod 644 /root/.zshrc || handle_error "$log_action" "Error al cambiar permisos de .zshrc de root."
+log_action="Copiar .zshrc de root"
+cp "$user_home/Entorno-Linux/Config/zshrc/root/.zshrc" /root/.zshrc > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al copiar .zshrc de root. Asegúrate de que '$user_home/Entorno-Linux/Config/zshrc/root/.zshrc' exista."
+fi
+chown root:root /root/.zshrc > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al cambiar propietario de .zshrc de root."
+fi
+chmod 644 /root/.zshrc > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al cambiar permisos de .zshrc de root."
+fi
 mark_task_completed "$log_action"
 
 # Instalar bat y lsd (.deb)
 log_action="Copiar archivos de lsd"
-echo "Copiando archivos .deb de lsd y bat a Downloads..."
-sudo cp -a "$user_home/Entorno-Linux/lsd/." "$user_home/Downloads/" || handle_error "$log_action" "Error al copiar archivos de lsd a Downloads. Asegúrate de que '$user_home/Entorno-Linux/lsd/' exista."
+sudo cp -a "$user_home/Entorno-Linux/lsd/." "$user_home/Downloads/" > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al copiar archivos de lsd a Downloads. Asegúrate de que '$user_home/Entorno-Linux/lsd/' exista."
+fi
 mark_task_completed "$log_action"
 
 log_action="Instalar bat y lsd"
-echo "Instalando bat (si es necesario)..."
 sudo dpkg -i "$user_home/Downloads/bat_0.24.0_amd64.deb" > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    echo "Advertencia: Falló la instalación de bat (dpkg). Intentando resolver dependencias faltantes." >&2
-    sudo apt --fix-broken install -y > /dev/null 2>&1 # Intenta arreglar dependencias
+handle_error "$log_action" "Error al instalar bat (dpkg). Asegúrate de que el archivo .deb exista y sea válido."
 fi
-echo "Instalando lsd (si es necesario)..."
 sudo dpkg -i "$user_home/Downloads/lsd_1.1.2_amd64.deb" > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    echo "Advertencia: Falló la instalación de lsd (dpkg). Intentando resolver dependencias faltantes." >&2
-    sudo apt --fix-broken install -y > /dev/null 2>&1 # Intenta arreglar dependencias
+handle_error "$log_action" "Error al instalar lsd (dpkg). Asegúrate de que el archivo .deb exista y sea válido."
 fi
 mark_task_completed "$log_action"
 
 # Actualizar .p10k.zsh
 log_action="Actualizar .p10k.zsh de usuario"
-echo "Copiando .p10k.zsh para el usuario..."
 sudo cp "$user_home/Entorno-Linux/Config/Power10kNormal/.p10k.zsh" \
-    "$user_home/.p10k.zsh" || handle_error "$log_action" "Error al actualizar .p10k.zsh de usuario. Asegúrate de que '$user_home/Entorno-Linux/Config/Power10kNormal/.p10k.zsh' exista."
+"$user_home/.p10k.zsh" > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al actualizar .p10k.zsh de usuario. Asegúrate de que '$user_home/Entorno-Linux/Config/Power10kNormal/.p10k.zsh' exista."
+fi
 mark_task_completed "$log_action"
 
 log_action="Actualizar .p10k.zsh de root"
-echo "Copiando .p10k.zsh para root..."
-cp "$user_home/Entorno-Linux/Config/Power10kRoot/.p10k.zsh" /root/.p10k.zsh || handle_error "$log_action" "Error al actualizar .p10k.zsh de root. Asegúrate de que '$user_home/Entorno-Linux/Config/Power10kRoot/.p10k.zsh' exista."
+cp "$user_home/Entorno-Linux/Config/Power10kRoot/.p10k.zsh" /root/.p10k.zsh > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al actualizar .p10k.zsh de root. Asegúrate de que '$user_home/Entorno-Linux/Config/Power10kRoot/.p10k.zsh' exista."
+fi
+mark_task_completed "$log_action"
+
+# Crear enlace simbólico .zshrc de root
+log_action="Crear enlace simbólico .zshrc de root"
+# Este enlace podría causar problemas si .zshrc del usuario es borrado.
+# Es preferible copiar el archivo a /root/.zshrc y gestionarlo por separado.
+# No se recomienda un enlace simbólico entre el home de un usuario y /root.
+# Si el objetivo es que el .zshrc de root sea idéntico, es mejor copiarlo.
+# Recomiendo que el .zshrc de root sea una copia independiente para evitar dependencias.
+# Dejo el comando, pero con la advertencia.
+sudo ln -sf "$user_home/.zshrc" /root/.zshrc > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al crear enlace simbólico .zshrc de root."
+fi
 mark_task_completed "$log_action"
 
 # Copiar scripts personalizados a bin
 log_action="Crear directorio bin en .config"
-echo "Creando directorio bin en .config para scripts personalizados..."
-sudo -u "$SUDO_USER" mkdir -p "$user_home/.config/bin" || handle_error "$log_action" "Error al crear el directorio bin en .config."
+sudo -u "$SUDO_USER" mkdir -p "$user_home/.config/bin" > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al crear el directorio bin en .config."
+fi
 mark_task_completed "$log_action"
 
 log_action="Copiar y dar permisos a scripts personalizados"
-echo "Copiando scripts personalizados y asignando permisos de ejecución..."
-sudo cp "$user_home/Entorno-Linux/bin/"* "$user_home/.config/bin/" || handle_error "$log_action" "Error al copiar scripts personalizados. Asegúrate de que '$user_home/Entorno-Linux/bin/' exista y tenga contenido."
-
-# Dar permisos de ejecución y cambiar la propiedad al usuario
-sudo -u "$SUDO_USER" chmod +x \
-    "$user_home/.config/bin/ethernet_status.sh" \
-    "$user_home/.config/bin/hackthebox_status.sh" \
-    "$user_home/.config/bin/target_to_hack.sh" || handle_error "$log_action" "Error al dar permisos de ejecución a scripts personalizados."
-
-sudo chown "$SUDO_USER":"$SUDO_USER" \
-    "$user_home/.config/bin/ethernet_status.sh" \
-    "$user_home/.config/bin/hackthebox_status.sh" \
-    "$user_home/.config/bin/target_to_hack.sh" > /dev/null 2>&1
+# La línea de cp debería haber cambiado ya a 'sudo cp'
+sudo cp "$user_home/Entorno-Linux/bin/"* "$user_home/.config/bin/" > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    echo "Advertencia: No se pudo cambiar la propiedad de los scripts en $user_home/.config/bin." >&2
+handle_error "$log_action" "Error al copiar scripts personalizados. Asegúrate de que '$user_home/Entorno-Linux/bin/' exista y tenga contenido."
+fi
+
+# AHORA EL CAMBIO CRÍTICO: Elimina '-u "$SUDO_USER"' de chmod
+sudo chmod +x \
+"$user_home/.config/bin/ethernet_status.sh" \
+"$user_home/.config/bin/hackthebox_status.sh" \
+"$user_home/.config/bin/target_to_hack.sh" > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al dar permisos de ejecución a scripts personalizados."
+fi
+
+# Y asegúrate de que esta sección para cambiar la propiedad esté presente y correcta
+sudo chown "$SUDO_USER":"$SUDO_USER" \
+"$user_home/.config/bin/ethernet_status.sh" \
+"$user_home/.config/bin/hackthebox_status.sh" \
+"$user_home/.config/bin/target_to_hack.sh" > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+echo "Advertencia: No se pudo cambiar la propiedad de los scripts en $user_home/.config/bin." >&2
 fi
 
 mark_task_completed "$log_action"
 
 # Instalar y configurar sudo-plugin
 log_action="Crear directorio zsh-sudo-plugin"
-echo "Creando directorio para zsh-sudo-plugin..."
-sudo mkdir -p /usr/share/zsh-sudo-plugin || handle_error "$log_action" "Error al crear directorio zsh-sudo-plugin."
+sudo mkdir -p /usr/share/zsh-sudo-plugin > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al crear directorio zsh-sudo-plugin."
+fi
+# La línea de chown a "$SUDO_USER" no debería ser necesaria para /usr/share/, root es el propietario.
+# Si se hizo, podría causar problemas de permisos. Lo quito por seguridad.
+# sudo chown "$SUDO_USER":"$SUDO_USER" /usr/share/zsh-sudo-plugin > /dev/null 2>&1
+# if [ $? -ne 0 ]; then
+#       handle_error "$log_action" "Error al cambiar propietario de zsh-sudo-plugin."
+#     handle_error "$log_action" "Error al cambiar propietario de zsh-sudo-plugin."
+# fi
 mark_task_completed "$log_action"
 
 log_action="Copiar y configurar sudo.plugin.zsh"
-echo "Copiando y configurando sudo.plugin.zsh..."
 sudo cp "$user_home/Entorno-Linux/sudoPlugin/sudo.plugin.zsh" \
-    /usr/share/zsh-sudo-plugin/ || handle_error "$log_action" "Error al copiar sudo.plugin.zsh. Asegúrate de que '$user_home/Entorno-Linux/sudoPlugin/sudo.plugin.zsh' exista."
-sudo chmod 755 /usr/share/zsh-sudo-plugin/sudo.plugin.zsh || handle_error "$log_action" "Error al dar permisos de ejecución a sudo.plugin.zsh."
+/usr/share/zsh-sudo-plugin/ > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al copiar sudo.plugin.zsh. Asegúrate de que '$user_home/Entorno-Linux/sudoPlugin/sudo.plugin.zsh' exista."
+fi
+sudo chmod 755 /usr/share/zsh-sudo-plugin/sudo.plugin.zsh > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al dar permisos de ejecución a sudo.plugin.zsh."
+fi
 mark_task_completed "$log_action"
 
 # Instalar npm
 log_action="Instalar npm"
-echo "Instalando npm..."
-if ! sudo apt install -y npm > /dev/null 2>&1; then
-    echo "Advertencia: Falló la instalación de npm." >&2
+sudo apt install -y npm > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al instalar npm."
 fi
 mark_task_completed "$log_action"
 
 # Instalar Flameshot
 log_action="Instalar Flameshot"
-echo "Instalando Flameshot..."
-if ! sudo apt install -y flameshot > /dev/null 2>&1; then
-    echo "Advertencia: Falló la instalación de Flameshot." >&2
+sudo apt install -y flameshot > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al instalar Flameshot."
 fi
 mark_task_completed "$log_action"
 
 # Instalar i3lock
 log_action="Instalar i3lock"
-echo "Instalando i3lock..."
-if ! sudo apt install -y i3lock > /dev/null 2>&1; then
-    echo "Advertencia: Falló la instalación de i3lock." >&2
+sudo apt install -y i3lock > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al instalar i3lock."
 fi
 mark_task_completed "$log_action"
 
 # Clonar e instalar i3lock-fancy
 log_action="Clonar e instalar i3lock-fancy"
-echo "Preparando para clonar e instalar i3lock-fancy..."
 cd "$user_home/Downloads" || handle_error "$log_action" "No se pudo cambiar al directorio Downloads ($user_home/Downloads)."
-
-if [ -d "i3lock-fancy" ]; then
-    echo "El directorio i3lock-fancy ya existe en Downloads. Saltando clonación."
-else
-    echo "Clonando i3lock-fancy desde https://github.com/meskarune/i3lock-fancy.git..."
-    sudo -u "$SUDO_USER" git clone https://github.com/meskarune/i3lock-fancy.git || handle_error "$log_action" "Error al clonar i3lock-fancy. Revisa tu conexión a internet o los permisos."
-fi
-
-cd i3lock-fancy || handle_error "$log_action" "No se pudo cambiar al directorio de i3lock-fancy."
-echo "Instalando i3lock-fancy..."
-sudo make install # La salida es visible para depuración
+sudo -u "$SUDO_USER" git clone https://github.com/meskarune/i3lock-fancy.git > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    handle_error "$log_action" "Error al instalar i3lock-fancy."
+handle_error "$log_action" "Error al clonar i3lock-fancy. Revisa tu conexión a internet o los permisos."
+fi
+cd i3lock-fancy || handle_error "$log_action" "No se pudo cambiar al directorio de i3lock-fancy."
+sudo make install > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al instalar i3lock-fancy."
 fi
 mark_task_completed "$log_action"
 
 # Crear enlace simbólico batcat
 log_action="Crear enlace simbólico batcat"
-echo "Creando enlace simbólico para 'batcat' (si es necesario)..."
 sudo ln -sf /usr/bin/bat /usr/bin/batcat > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    echo "Advertencia: Falló la creación del enlace simbólico para batcat." >&2
+handle_error "$log_action" "Error al crear enlace simbólico para batcat."
 fi
 mark_task_completed "$log_action"
 
 # Actualización final del sistema
 log_action="Realizar actualización final del sistema"
-echo "Realizando 'apt update' final..."
-if ! sudo apt update > /dev/null 2>&1; then # Suprimida salida normal
-    echo "Advertencia: 'apt update' final falló. Intentando continuar." >&2
+sudo apt update > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+handle_error "$log_action" "Error al ejecutar 'apt update' final."
 fi
 
-echo "Intentando 'parrot-upgrade' o 'apt upgrade' final..."
-if ! parrot-upgrade -y > /dev/null 2>&1; then # Suprimida salida normal
-    echo "Advertencia: 'parrot-upgrade' falló o no está disponible en la actualización final. Intentando 'apt upgrade'." >&2
-    if ! sudo apt upgrade -y > /dev/null 2>&1; then # Suprimida salida normal
-        echo "Advertencia: 'apt upgrade' final también falló. El sistema puede no estar completamente actualizado." >&2
-    fi
+# Intentar parrot-upgrade, si falla, usar apt upgrade
+if ! parrot-upgrade -y > /dev/null 2>&1; then
+echo "Advertencia: 'parrot-upgrade' falló o no está disponible en la actualización final. Intentando 'apt upgrade'." >&2
+if ! sudo apt upgrade -y > /dev/null 2>&1; then
+handle_error "$log_action" "Error durante la actualización final del sistema con 'apt upgrade'."
+fi
 fi
 sudo apt autoremove -y > /dev/null 2>&1 # Limpia paquetes viejos
 mark_task_completed "$log_action"
 
-# Mensaje final de entorno listo
-log_action="Finalizar y mostrar mensaje de éxito" # Tarea de la checklist
+# Reiniciar sesión de usuario
+log_action="Reiniciar sesión de usuario"
+# No se ejecuta aquí, es una instrucción manual al final del script.
+# Esto se marca como completado para que la checklist muestre el progreso.
+# Correccion de kitty (Este comando descarga y ejecuta un script de instalación de Kitty, lo cual puede ser útil si la instalación de apt fue problemática)
+log_action="Corregir instalación de Kitty"
+curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+    echo "Advertencia: El script de corrección de Kitty falló. Esto podría no ser un error crítico si Kitty ya funciona." >&2
+fi
+mark_task_completed "$log_action"
 
-clear_screen # Limpia la pantalla una última vez antes del mensaje final
+
+clear_screen # Limpia la pantalla antes del mensaje final
 echo "======================================================"
-echo "          ¡EL ENTORNO ESTÁ LISTO!                   "
+echo "          INSTALACIÓN COMPLETADA EXITOSAMENTE         "
 echo "======================================================"
 echo ""
-echo "¡Felicidades! La instalación y configuración de tu entorno han finalizado exitosamente."
-echo "Para que todos los cambios surtan efecto por completo, te recomendamos encarecidamente"
-echo "que **reinicies tu sesión actual** o **reinicies el sistema**."
+echo "Todas las tareas han sido completadas."
+echo "Para que los cambios surtan efecto, por favor, **reinicia tu sesión de usuario**."
 echo ""
-read -p "Presiona Enter para finalizar el script y cerrar esta terminal..."
-
-mark_task_completed "$log_action" # Marca la última tarea como completada justo antes de salir
-
-exit 0
+echo "¡Disfruta de tu nuevo entorno!"
+# Reiniciar sesión de usuario (será lo último)
+mark_task_completed "Reiniciar sesión de usuario"
+clear_screen
+echo "¡Instalación completada! La sesión se reiniciará ahora."
+kill -9 -1 # Este comando forzará el reinicio de la sesión.
