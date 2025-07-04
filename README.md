@@ -18,7 +18,7 @@ Este script está diseñado para sistemas operativos Linux en inglés. Si tu sis
 Es importante que leas detenidamente y sigas cada paso para no tener problemas
 
 ## 🎥 Tutorial paso a paso
-Puedess seguir el video tutorial completo en mi [canal de YouTube](https://www.youtube.com/@CristianSinH-Ciber).
+Puedess seguir el video tutorial completo en mi [canal de YouTube](https://youtu.be/cmTnzX-tvXU?si=dwbtjKRm8uicbGEX).
 Si te resulta útil el contenido, no olvides suscribirte y seguirme en [LinkedIn](https://www.linkedin.com/in/cristian-hsilva).
 
 
