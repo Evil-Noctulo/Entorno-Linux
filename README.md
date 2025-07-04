@@ -208,15 +208,6 @@ Atajos (Personalización de entorno en Linux)
 |`Ctrl + Shift + Alt + T`|Renombrar|
 |`Ctrl + Shift + Alt + , / .`|Desplazamiento por pestañas (Signo coma o punto)|
 
-#### 🔹 FZF
-
-|Combinación|Acción|
-|---|---|
-|`Ctrl + R`|Buscar por el Historial (utiliza Flechas para desplazarte)|
-|`wh Ctrl + T`|Te mueves por lo que hayas escrito anteriormente (`escribes wh`)|
-|`cd ** Ctrl + T`|Buscar directorios (`escribes cd**`)|
-|`rm Ctrl + T`|Seleccionas con TAB archivos a eliminar y con ENTER aceptas (`escribes rm`)|
-
 ---
 
 📬 Contacto
