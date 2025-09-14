@@ -178,7 +178,7 @@ mark_task_completed "Mostrar aviso inicial"
 # Instalar herramientas generales
 log_action="Instalar dependencias y herramientas generales (git, curl, etc.)"
 echo "Instalando herramientas de desarrollo y utilidades esenciales (git, curl, wget, neovim)..."
-if ! apt install -y git curl wget neovim; then
+if ! apt install -y git curl wget neovim net-tools; then
     echo "Advertencia: Falló la instalación de herramientas esenciales." >&2
 fi
 mark_task_completed "$log_action"
